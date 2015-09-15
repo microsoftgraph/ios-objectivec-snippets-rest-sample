@@ -27,7 +27,7 @@ The Office 365 unified API exposes multiple APIs from Microsoft cloud services t
 1. Clone this repository
 2. Use CocoaPods to import the Active Directory Authentication Library (ADAL) iOS dependency:
         
-	     pod 'ADALiOS', '~> 1.2.4'
+	     pod 'ADALiOS', '= 1.2.4'
 
  This sample app already contains a podfile that will get the ADAL components(pods) into  the project. Simply navigate to the project from **Terminal** and run 
         
