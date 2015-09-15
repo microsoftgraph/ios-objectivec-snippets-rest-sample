@@ -1,0 +1,14 @@
+{
+    "Subject": "Unified API snippets",
+    "Body": {
+        "ContentType": "Text",
+        "Content": "You can create a message draft by making a POST request to /me/messages."
+    },
+    "ToRecipients": [
+                     {
+                     "EmailAddress": {
+                     "Address": "AlexD@patsoldemo6.onmicrosoft.com"
+                     }
+                     }
+                     ]
+}

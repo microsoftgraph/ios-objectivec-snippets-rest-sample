@@ -1,0 +1,20 @@
+{
+    "Subject": "Weekly Sync",
+    "Location": {
+        "DisplayName": "Water cooler"
+    },
+    "Attendees": [
+                  {
+                  "Type": "Required",
+                  "EmailAddress": {
+                  "Address": "mara@fabrikam.com"
+                  }
+                  }
+                  ],
+    "Start": "2015-09-22T20:47:00.925Z",
+    "End": "2015-09-22T21:17:00.925Z",
+    "Body": {
+        "Content": "Status updates, blocking issues, and next steps.",
+        "ContentType": "Text"
+    }
+}

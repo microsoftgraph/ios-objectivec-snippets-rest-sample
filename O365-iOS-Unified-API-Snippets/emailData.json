@@ -1,0 +1,17 @@
+{
+    "Message": {
+        "Subject": "Unified API snippets",
+        "Body": {
+            "ContentType": "Text",
+            "Content": "You can send an email by making a POST request to /me/sendMail."
+        },
+        "ToRecipients": [
+                         {
+                         "EmailAddress": {
+                         "Address": "<EMAIL>"
+                         }
+                         }
+                         ]
+    },
+    "SaveToSentItems": "true"
+}

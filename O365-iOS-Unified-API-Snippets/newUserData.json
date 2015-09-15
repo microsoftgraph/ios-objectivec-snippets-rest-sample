@@ -1,0 +1,10 @@
+{
+    "accountEnabled": true,
+    "displayName": "User <USER>",
+    "mailNickname": "<USER>",
+    "passwordProfile": {
+        "password": "p@ssw0rd!",
+        "forceChangePasswordNextLogin": false
+    },
+    "userPrincipalName": "<USER>@patsoldemo6.onmicrosoft.com"
+}
