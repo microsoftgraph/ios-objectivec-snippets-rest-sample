@@ -44,6 +44,7 @@ This sample app already contains a podfile that will get the necessary component
         // these when you register your application in Microsoft Azure.
         NSString * const kRedirectUri = @"ENTER_REDIRECT_URI_HERE";
         NSString * const kClientId    = @"ENTER_CLIENT_ID_HERE";
+        NSString * const kResourceId  = @"https://graph.microsoft.com";
         NSString * const kAuthority   = @"https://login.microsoftonline.com/common";
     
     > Note: If you have don't have CLIENT_ID and REDIRECT_URI values, [add a native client application in Azure](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding) and take note of the CLIENT\_ID and REDIRECT_URI.

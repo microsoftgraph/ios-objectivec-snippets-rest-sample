@@ -90,33 +90,26 @@ NSInteger const TokenExpirationBuffer = 300;
                            }];
 }
 
-#pragma mark - Refresh roken
+#pragma mark - Refresh token
 - (void)checkAndRefreshToken:(void (^)(ADAuthenticationError *error))completion{
     if(self.refreshToken) {
         NSDate *now = [NSDate dateWithTimeIntervalSinceNow:TokenExpirationBuffer];
         NSComparisonResult result = [self.expiresDate compare:now];
-        switch (result) {
-            case NSOrderedSame:
-            case NSOrderedAscending:{
-                [self.context acquireTokenByRefreshToken:self.refreshToken
-                                                clientId:self.clientID
-                                         completionBlock:^(ADAuthenticationResult *result) {
-                                             if(AD_SUCCEEDED == result.status){
-                                                 completion(nil);
-                                             }
-                                             else{
-                                                 completion(result.error);
-                                             }
-                                         }];
-            }
-                break;
-            case NSOrderedDescending:
-                break;
-            default:
-                break;
+        if (result == NSOrderedSame || result == NSOrderedAscending) {
+            [self.context acquireTokenByRefreshToken:self.refreshToken
+                                            clientId:self.clientID
+                                     completionBlock:^(ADAuthenticationResult *result) {
+                                         if(AD_SUCCEEDED == result.status){
+                                             completion(nil);
+                                         }
+                                         else{
+                                             completion(result.error);
+                                         }
+                                     }];
+            return;
         }
     }
-    
+    completion(nil);
 }
 
 #pragma mark - clear credentials

@@ -12,6 +12,7 @@
 // You will set your application's clientId and redirect URI.
 NSString * const kRedirectUri = @"ENTER_REDIRECT_URI_HERE";
 NSString * const kClientId    = @"ENTER_CLIENT_ID_HERE";
+NSString * const kResourceId  = @"https://graph.microsoft.com";
 NSString * const kAuthority   = @"https://login.microsoftonline.com/common";
 
 @interface ConnectViewController () <UISplitViewControllerDelegate>
@@ -45,7 +46,7 @@ NSString * const kAuthority   = @"https://login.microsoftonline.com/common";
     [authManager initWithAuthority:kAuthority
                           clientId:kClientId
                        redirectURI:kRedirectUri
-                        resourceID:@"https://graph.microsoft.com"
+                        resourceID:kResourceId
                         completion:^(ADAuthenticationError *error) {
                             if(error){
                                 [self showLoadingUI:NO];
@@ -58,8 +59,8 @@ NSString * const kAuthority   = @"https://login.microsoftonline.com/common";
                                         [self handleADAuthenticationError:acquireTokenError];
                                     }
                                     else{
-                                        [self showLoadingUI:NO];
                                         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                            [self showLoadingUI:NO];
                                             [self performSegueWithIdentifier:@"showSplitView" sender:nil];
                                             
                                         }];

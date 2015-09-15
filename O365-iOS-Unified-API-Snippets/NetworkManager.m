@@ -36,19 +36,14 @@
 queryParams:(NSDictionary*)queryParams
     success:(void (^)(id responseHeader, id responseObject))success
     failure:(void (^)(id responseObject))failure{
-    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
-        if(error){
-            failure(error);
-            return;
-        }
-        [self get:path queryParams:queryParams
+    
+    [self get:path queryParams:queryParams
 customResponseType:nil
-          success:^(id responseHeader, id responseObject) {
-              success(responseHeader, responseObject);
-          } failure:^(id responseObject) {
-              failure(responseObject);
-          }];
-    }];
+      success:^(id responseHeader, id responseObject) {
+          success(responseHeader, responseObject);
+      } failure:^(id responseObject) {
+          failure(responseObject);
+      }];
 }
 
 + (void)get:(NSString*)path
@@ -56,12 +51,13 @@ queryParams:(NSDictionary*)queryParams
 customResponseType:(NSString*)responseType
     success:(void (^)(id responseHeader, id responseObject))success
     failure:(void (^)(id responseObject))failure{
+
     [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
         if(error){
             failure(error);
             return;
         }
-        
+
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         
         [manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]

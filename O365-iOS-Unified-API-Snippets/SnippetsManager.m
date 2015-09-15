@@ -195,11 +195,16 @@
 
 // Creates and adds an event to the signed-in user's calendar - eventData.json
 - (Operation*) addNewCalendarEvent{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+    
+    NSDate *startDate = [[NSDate date] dateByAddingTimeInterval:60*60*24];
+    NSDate *endDate = [[NSDate date] dateByAddingTimeInterval:60*60*24+100];
     
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"eventData" ofType:@"json"];
-    NSMutableString *payload = [NSMutableString stringWithString:[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]];
+    NSString *payload = [[[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil] stringByReplacingOccurrencesOfString:@"<STARTDATETIME>" withString:[dateFormatter stringFromDate:startDate]]
+                         stringByReplacingOccurrencesOfString:@"<ENDDATETIME>" withString:[dateFormatter stringFromDate:endDate]];
     
-  
     Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Add a new event"
                                                           urlString:@"https://graph.microsoft.com/beta/me/events"
                                                       operationType:OperationPostCustom

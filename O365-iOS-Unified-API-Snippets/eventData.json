@@ -11,8 +11,8 @@
                   }
                   }
                   ],
-    "Start": "2015-09-22T20:47:00.925Z",
-    "End": "2015-09-22T21:17:00.925Z",
+    "Start": "<STARTDATETIME>",
+    "End": "<ENDDATETIME>",
     "Body": {
         "Content": "Status updates, blocking issues, and next steps.",
         "ContentType": "Text"

@@ -24,7 +24,7 @@
 
     _snippetManager = [[SnippetsManager alloc] init];
 
-    UIBarButtonItem *signOutButton = [[UIBarButtonItem alloc] initWithTitle:@"Sign Out" style:UIBarButtonItemStylePlain target:self action:@selector(signOut:)];
+    UIBarButtonItem *signOutButton = [[UIBarButtonItem alloc] initWithTitle:@"Disconnect" style:UIBarButtonItemStylePlain target:self action:@selector(signOut:)];
     self.navigationItem.leftBarButtonItem = signOutButton;
     
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
@@ -82,7 +82,7 @@
     if(operation.isAdminRequired)
         cell.detailTextLabel.text = @"Requires admin account";
     else
-        cell.detailTextLabel.text = @"";
+        cell.detailTextLabel.text = @" ";
         
     return cell;
 }
