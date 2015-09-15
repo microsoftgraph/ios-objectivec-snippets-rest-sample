@@ -8,7 +8,16 @@
 #import <ADAuthenticationError.h>
 #import "DetailTableViewController.h"
 
-@interface ConnectViewController () <AuthManagerDelegates, UISplitViewControllerDelegate>
+
+// You will set your application's clientId and redirect URI.
+NSString * const kRedirectUri = @"ENTER_REDIRECT_URI_HERE";
+NSString * const kClientId    = @"ENTER_CLIENT_ID_HERE";
+NSString * const kAuthority   = @"https://login.microsoftonline.com/common";
+
+@interface ConnectViewController () <UISplitViewControllerDelegate>
+
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UIButton *connectButton;
 
 @end
 
@@ -30,31 +39,61 @@
 }
 
 - (IBAction)authenticateWithAzureTapped:(id)sender {
-    [AuthenticationManager sharedInstance].authDelegate = self;
-    [[AuthenticationManager sharedInstance] connectO365];
+    [self showLoadingUI:YES];
+    AuthenticationManager *authManager = [AuthenticationManager sharedInstance];
+    
+    [authManager initWithAuthority:kAuthority
+                          clientId:kClientId
+                       redirectURI:kRedirectUri
+                        resourceID:@"https://graph.microsoft.com"
+                        completion:^(ADAuthenticationError *error) {
+                            if(error){
+                                [self showLoadingUI:NO];
+                                [self handleADAuthenticationError:error];
+                            }
+                            else{
+                                [authManager acquireAuthTokenCompletion:^(ADAuthenticationError *acquireTokenError) {
+                                    if(acquireTokenError){
+                                        [self showLoadingUI:NO];
+                                        [self handleADAuthenticationError:acquireTokenError];
+                                    }
+                                    else{
+                                        [self showLoadingUI:NO];
+                                        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                                            [self performSegueWithIdentifier:@"showSplitView" sender:nil];
+                                            
+                                        }];
+                                    }
+                                }];
+                            }
+                        }];
 }
 
-
-#pragma mark - Authentication delegates
-- (void)authSuccess{
-    [self performSegueWithIdentifier:@"showSplitView" sender:nil];
+#pragma mark - helper
+- (void)showLoadingUI:(BOOL)loading{
+    if(loading){
+        [self.activityIndicator startAnimating];
+        self.connectButton.enabled = NO;
+    }
+    else{
+        [self.activityIndicator stopAnimating];
+        self.connectButton.enabled = YES;
+    }
 }
 
-- (void)authFailure:(NSError *)error{
+- (void)handleADAuthenticationError:(ADAuthenticationError *)error{
+    NSLog(@"Error\nProtocol Code %@\nDescription %@", error.protocolCode, error.description);
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
-                                                                   message:[NSString stringWithFormat:@"Unable to authenticate\n%@", error.localizedDescription]
+                                                                   message:@"Please see the log for more details"
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Close" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        ;
-    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Close"
+                                              style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                                                  ;
+                                              }]];
     [self presentViewController:alert animated:YES completion:^{
         ;
     }];
 }
-
-- (void)authDisconnect:(NSError *)error{
-}
-
 
 #pragma mark - Navigation
 

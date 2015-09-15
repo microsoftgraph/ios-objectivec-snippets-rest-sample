@@ -4,7 +4,6 @@
 
 #import "AuthenticationManager.h"
 #import <ADAuthenticationResult.h>
-#import "O365Auth.h"
 #import <ADTokenCacheStoreItem.h>
 
 //The buffer in number of seconds added to the current time when checking if the access token expired
@@ -12,57 +11,103 @@ NSInteger const TokenExpirationBuffer = 300;
 
 @interface AuthenticationManager()
 
-@property (nonatomic, assign) BOOL isRefreshing;
-@property (nonatomic, strong) O365Auth *o365Auth;
+@property (nonatomic, strong) NSString *authority;
+@property (nonatomic, strong) NSString *clientID;
+@property (nonatomic, strong) NSString *redirectUri;
+@property (nonatomic, strong) NSString *resourceID;
+
+@property (nonatomic, strong) ADAuthenticationContext *context;
+
 @end
 
 @implementation AuthenticationManager
 
 // Use a single authentication manager for the application.
-+ (AuthenticationManager *)sharedInstance
-{
++ (AuthenticationManager *)sharedInstance{
     static AuthenticationManager *sharedInstance;
     static dispatch_once_t onceToken;
     
     // Initialize the AuthenticationManager only once.
     dispatch_once(&onceToken, ^{
         sharedInstance = [[AuthenticationManager alloc] init];
-        sharedInstance.isRefreshing = NO;
-        sharedInstance.o365Auth = [[O365Auth alloc] init];
     });
     
     return sharedInstance;
 }
 
-
-#pragma mark - properties
-- (void) setIsO365Connected:(BOOL)isAzureConnected{
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setBool:isAzureConnected forKey:@"O365Connected"];
-    [userDefaults synchronize];
+#pragma mark - init
+- (void)initWithAuthority:(NSString*)authority
+                 clientId:(NSString*)clientId
+              redirectURI:(NSString*)redirectURI
+               resourceID:(NSString*)resourceID
+               completion:(void (^)(ADAuthenticationError *error))completion{
+    ADAuthenticationError *error;
+    _context = [ADAuthenticationContext authenticationContextWithAuthority:authority error:&error];
+    
+    if(error){
+        // Log error
+        completion(error);
+    }
+    else{
+        self.clientID = clientId;
+        self.redirectUri = redirectURI;
+        self.authority = authority;
+        self.resourceID = resourceID;
+        
+        completion(nil);
+    }
 }
 
-- (BOOL) isO365Connected{
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"O365Connected"];
+#pragma mark - acquire token
+- (void)acquireAuthTokenCompletion:(void (^)(ADAuthenticationError *error))completion{
+    [self acquireAuthTokenWithResource:self.resourceID
+                              clientID:self.clientID
+                           redirectURI: [NSURL URLWithString:self.redirectUri]
+                            Completion:^(ADAuthenticationError *error) {
+                                completion(error);}];
 }
 
-#pragma mark - O365 connection
-- (void)connectO365{
-    self.o365Auth.delegate = self;
-    [self.o365Auth acquireAuthToken];
+- (void)acquireAuthTokenWithResource:(NSString *)resourceID
+                            clientID:(NSString*)clientID
+                         redirectURI:(NSURL*)redirectURI
+                          Completion:(void (^)(ADAuthenticationError *error))completion{
+    [self.context acquireTokenWithResource:resourceID
+                                  clientId:clientID
+                               redirectUri:redirectURI
+                           completionBlock:^(ADAuthenticationResult *result) {
+                               if (result.status !=AD_SUCCEEDED){
+                                   completion(result.error);
+                               }
+                               
+                               else{
+                                   self.accessToken = result.accessToken;
+                                   self.refreshToken = result.tokenCacheStoreItem.refreshToken;
+                                   self.familyName = result.tokenCacheStoreItem.userInformation.familyName;
+                                   self.givenName = result.tokenCacheStoreItem.userInformation.givenName;
+                                   self.userID = result.tokenCacheStoreItem.userInformation.userId;
+                                   completion(nil);
+                               }
+                           }];
 }
-
 
 #pragma mark - Refresh roken
-- (void)checkAndRefreshToken{
+- (void)checkAndRefreshToken:(void (^)(ADAuthenticationError *error))completion{
     if(self.refreshToken) {
         NSDate *now = [NSDate dateWithTimeIntervalSinceNow:TokenExpirationBuffer];
         NSComparisonResult result = [self.expiresDate compare:now];
         switch (result) {
             case NSOrderedSame:
             case NSOrderedAscending:{
-                self.isRefreshing = YES;
-                [self.o365Auth refreshToken:self.refreshToken];
+                [self.context acquireTokenByRefreshToken:self.refreshToken
+                                                clientId:self.clientID
+                                         completionBlock:^(ADAuthenticationResult *result) {
+                                             if(AD_SUCCEEDED == result.status){
+                                                 completion(nil);
+                                             }
+                                             else{
+                                                 completion(result.error);
+                                             }
+                                         }];
             }
                 break;
             case NSOrderedDescending:
@@ -74,57 +119,20 @@ NSInteger const TokenExpirationBuffer = 300;
     
 }
 
-
-#pragma mark - AuthHelper Delegates
-
-- (void) authCompleteWithToken:(NSString *)authToken
-                    refreshToken:(NSString *)refreshToken
-                  emailAddress:(NSString *)emailAddress
-                       expirates:(NSDate *)expiresOn
-                        authType:(AuthType)authType{
-    self.accessToken = authToken;
-    self.refreshToken = refreshToken;
-    self.expiresDate = expiresOn;
-    self.emailAddress = emailAddress;
-    self.isO365Connected = YES;
-
-    [self.authDelegate authSuccess];
-}
-
-- (void) authFailure:(NSError *)error
-              authType:(AuthType)authType{
-    [self disconnect];
-    [self.authDelegate authFailure:error];
-}
-
-- (void) refreshToken:(NSString *)accessToken
-           refreshToken:(NSString *)refreshToken
-              expirates:(NSDate *)expiresOn
-               authType:(AuthType)authType{
-    self.isRefreshing = NO;
-    self.accessToken = accessToken;
-    self.refreshToken = refreshToken;
-    self.expiresDate = expiresOn;
-}
-
-- (void) refreshTokenFailure:(NSError *)error
-                      authType:(AuthType)authType{
-    self.isRefreshing = NO;
-    [self disconnect];
-    [self.authDelegate authDisconnect:error];
-}
-
-
-
-#pragma mark - disconnect
-
-- (void)disconnect{
-    if (self.o365Auth){
-        [self.o365Auth clearCredentials];
+#pragma mark - clear credentials
+//Clears the ADAL token cache and the cookie cache.
+- (void)clearCredentials{
+    
+    // Remove all the cookies from this application's sandbox. The authorization code is stored in the
+    // cookies and ADAL will try to get to access tokens based on auth code in the cookie.
+    NSHTTPCookieStorage *cookieStore = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    for (NSHTTPCookie *cookie in cookieStore.cookies) {
+        [cookieStore deleteCookie:cookie];
     }
-
-    self.isO365Connected = NO;
+    
+    [self.context.tokenCacheStore removeAllWithError:nil];
 }
+
 
 @end
 

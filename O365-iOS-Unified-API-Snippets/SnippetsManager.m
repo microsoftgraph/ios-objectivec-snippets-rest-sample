@@ -266,7 +266,7 @@
     
     // replace email address to self
     NSString *payload = [[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]
-                            stringByReplacingOccurrencesOfString:@"<EMAIL>" withString:[[AuthenticationManager sharedInstance] emailAddress]];
+                            stringByReplacingOccurrencesOfString:@"<EMAIL>" withString:[[AuthenticationManager sharedInstance] userID]];
     
     
     Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Create and send message to user"
@@ -288,7 +288,7 @@
     
     // replace email address to self
     NSString *payload = [[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]
-                         stringByReplacingOccurrencesOfString:@"<EMAIL>" withString:[[AuthenticationManager sharedInstance] emailAddress]];
+                         stringByReplacingOccurrencesOfString:@"<EMAIL>" withString:[[AuthenticationManager sharedInstance] userID]];
 
     Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Create a draft message"
                                                           urlString:@"https://graph.microsoft.com/beta/me/messages"

@@ -17,7 +17,6 @@
 		963E9EFE1B38C50400D57EAA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 963E9EFC1B38C50400D57EAA /* LaunchScreen.xib */; };
 		963E9F161B38C6E100D57EAA /* ConnectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E9F151B38C6E100D57EAA /* ConnectViewController.m */; };
 		963E9F1C1B38CE5F00D57EAA /* AuthenticationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E9F1B1B38CE5F00D57EAA /* AuthenticationManager.m */; };
-		963E9F221B38CE8B00D57EAA /* O365Auth.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E9F211B38CE8B00D57EAA /* O365Auth.m */; };
 		963E9F261B38CED900D57EAA /* SnippetsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E9F251B38CED900D57EAA /* SnippetsManager.m */; };
 		963E9F2A1B38CF1D00D57EAA /* NetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 963E9F291B38CF1D00D57EAA /* NetworkManager.m */; };
 		9642FCC11BA2CE9D00BCC6F0 /* newUserData.json in Resources */ = {isa = PBXBuildFile; fileRef = 9642FCC01BA2CE9D00BCC6F0 /* newUserData.json */; };
@@ -42,7 +41,6 @@
 /* Begin PBXFileReference section */
 		854A3998C333805F74F8CA48 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		960C1FCB1B3B639700918D53 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		961E871C1B44B20600060961 /* AuthHelperDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AuthHelperDelegate.h; sourceTree = "<group>"; };
 		963E9EE71B38C50400D57EAA /* O365-iOS-Unified-API-Snippets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "O365-iOS-Unified-API-Snippets.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		963E9EEB1B38C50400D57EAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		963E9EEC1B38C50400D57EAA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -57,8 +55,6 @@
 		963E9F151B38C6E100D57EAA /* ConnectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectViewController.m; sourceTree = "<group>"; };
 		963E9F1A1B38CE5F00D57EAA /* AuthenticationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthenticationManager.h; sourceTree = "<group>"; };
 		963E9F1B1B38CE5F00D57EAA /* AuthenticationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthenticationManager.m; sourceTree = "<group>"; };
-		963E9F201B38CE8B00D57EAA /* O365Auth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = O365Auth.h; sourceTree = "<group>"; };
-		963E9F211B38CE8B00D57EAA /* O365Auth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = O365Auth.m; sourceTree = "<group>"; };
 		963E9F241B38CED900D57EAA /* SnippetsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnippetsManager.h; sourceTree = "<group>"; };
 		963E9F251B38CED900D57EAA /* SnippetsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnippetsManager.m; sourceTree = "<group>"; };
 		963E9F281B38CF1D00D57EAA /* NetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkManager.h; sourceTree = "<group>"; };
@@ -154,9 +150,6 @@
 			children = (
 				963E9F1A1B38CE5F00D57EAA /* AuthenticationManager.h */,
 				963E9F1B1B38CE5F00D57EAA /* AuthenticationManager.m */,
-				963E9F201B38CE8B00D57EAA /* O365Auth.h */,
-				963E9F211B38CE8B00D57EAA /* O365Auth.m */,
-				961E871C1B44B20600060961 /* AuthHelperDelegate.h */,
 			);
 			name = Authentication;
 			sourceTree = "<group>";
@@ -405,7 +398,6 @@
 				963E9EF01B38C50400D57EAA /* AppDelegate.m in Sources */,
 				963E9F161B38C6E100D57EAA /* ConnectViewController.m in Sources */,
 				963E9EF31B38C50400D57EAA /* MasterViewController.m in Sources */,
-				963E9F221B38CE8B00D57EAA /* O365Auth.m in Sources */,
 				963E9EED1B38C50400D57EAA /* main.m in Sources */,
 				96AE86C71B59BDE600D803B2 /* SnippetsManagerConf.m in Sources */,
 				9663321C1B3CA12C007A9E5E /* Operation.m in Sources */,

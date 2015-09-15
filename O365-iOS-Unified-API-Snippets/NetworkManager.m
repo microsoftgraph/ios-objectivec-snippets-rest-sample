@@ -36,13 +36,19 @@
 queryParams:(NSDictionary*)queryParams
     success:(void (^)(id responseHeader, id responseObject))success
     failure:(void (^)(id responseObject))failure{
-    
-    [self get:path queryParams:queryParams customResponseType:nil
-      success:^(id responseHeader, id responseObject) {
-          success(responseHeader, responseObject);
-      } failure:^(id responseObject) {
-          failure(responseObject);
-      }];
+    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
+        if(error){
+            failure(error);
+            return;
+        }
+        [self get:path queryParams:queryParams
+customResponseType:nil
+          success:^(id responseHeader, id responseObject) {
+              success(responseHeader, responseObject);
+          } failure:^(id responseObject) {
+              failure(responseObject);
+          }];
+    }];
 }
 
 + (void)get:(NSString*)path
@@ -50,35 +56,40 @@ queryParams:(NSDictionary*)queryParams
 customResponseType:(NSString*)responseType
     success:(void (^)(id responseHeader, id responseObject))success
     failure:(void (^)(id responseObject))failure{
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    [manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
-                     forHTTPHeaderField:@"Authorization"];
-    
-    if(responseType){
-        manager.responseSerializer = [[AFHTTPResponseSerializerHTML alloc] init];
-        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:responseType];
-    }
-
-    [manager GET:path
-      parameters:[self paramsRemove:self.keysToRemove from:queryParams]
-         success:^(AFHTTPRequestOperation *operation, id responseObject) {
-             success(operation.response.allHeaderFields, responseObject);
-         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-             NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
-             
-             if(![operation.responseString isEqual:[NSNull null]])
-                 [userInfo setObject:operation.responseString forKey:@"responseString"];
-             
-             NSError *newError = [NSError errorWithDomain:error.domain
-                                                     code:error.code
-                                                 userInfo:userInfo];
-             
-
-             failure(newError);
-         }];
-    
+    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
+        if(error){
+            failure(error);
+            return;
+        }
+        
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        
+        [manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
+                         forHTTPHeaderField:@"Authorization"];
+        
+        if(responseType){
+            manager.responseSerializer = [[AFHTTPResponseSerializerHTML alloc] init];
+            manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:responseType];
+        }
+        
+        [manager GET:path
+          parameters:[self paramsRemove:self.keysToRemove from:queryParams]
+             success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                 success(operation.response.allHeaderFields, responseObject);
+             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                 NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+                 
+                 if(![operation.responseString isEqual:[NSNull null]])
+                     [userInfo setObject:operation.responseString forKey:@"responseString"];
+                 
+                 NSError *newError = [NSError errorWithDomain:error.domain
+                                                         code:error.code
+                                                     userInfo:userInfo];
+                 
+                 
+                 failure(newError);
+             }];
+    }];
 }
 
 
@@ -86,91 +97,106 @@ customResponseType:(NSString*)responseType
  queryParams:(NSDictionary*)queryParams
      success:(void (^)(id responseHeader, id responseObject))success
      failure:(void (^)(id responseObject))failure{
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-
-    AFJSONRequestSerializer *serializer = [AFJSONRequestSerializer serializer];
-    [serializer setValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
-      forHTTPHeaderField:@"Authorization"];
-    manager.requestSerializer = serializer;
-    
-    [manager POST:path
-       parameters:[self paramsRemove:self.keysToRemove from:queryParams]
-          success:^(AFHTTPRequestOperation *operation, id responseObject) {
-              success(operation.response.allHeaderFields, responseObject);
-          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-              NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
-              
-              if(![operation.responseString isEqual:[NSNull null]])
-                  [userInfo setObject:operation.responseString forKey:@"responseString"];
-              
-              NSError *newError = [NSError errorWithDomain:error.domain
-                                                      code:error.code
-                                                  userInfo:userInfo];
-              
-              
-              failure(newError);
-          }];
-    
+    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
+        if(error){
+            failure(error);
+            return;
+        }
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        
+        AFJSONRequestSerializer *serializer = [AFJSONRequestSerializer serializer];
+        [serializer setValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
+          forHTTPHeaderField:@"Authorization"];
+        manager.requestSerializer = serializer;
+        
+        [manager POST:path
+           parameters:[self paramsRemove:self.keysToRemove from:queryParams]
+              success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                  success(operation.response.allHeaderFields, responseObject);
+              } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                  NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+                  
+                  if(![operation.responseString isEqual:[NSNull null]])
+                      [userInfo setObject:operation.responseString forKey:@"responseString"];
+                  
+                  NSError *newError = [NSError errorWithDomain:error.domain
+                                                          code:error.code
+                                                      userInfo:userInfo];
+                  
+                  
+                  failure(newError);
+              }];
+    }];
 }
 
 + (void)deleteOperation:(NSString*)path queryParams:(NSDictionary*)queryParams
                 success:(void (^)(id responseHeader, id responseObject))success
                 failure:(void (^)(id responseObject))failure{
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    [manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
-                     forHTTPHeaderField:@"Authorization"];
-    
-    [manager DELETE:path
-         parameters:[self paramsRemove:self.keysToRemove from:queryParams]
-            success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                success(operation.response.allHeaderFields, responseObject);
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
-                
-                if(![operation.responseString isEqual:[NSNull null]])
-                    [userInfo setObject:operation.responseString forKey:@"responseString"];
-                
-                NSError *newError = [NSError errorWithDomain:error.domain
-                                                        code:error.code
-                                                    userInfo:userInfo];
-                
-                
-                failure(newError);
-            }];
-    
+    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
+        if(error){
+            failure(error);
+            return;
+        }
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        
+        [manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
+                         forHTTPHeaderField:@"Authorization"];
+        
+        [manager DELETE:path
+             parameters:[self paramsRemove:self.keysToRemove from:queryParams]
+                success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                    success(operation.response.allHeaderFields, responseObject);
+                } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+                    
+                    if(![operation.responseString isEqual:[NSNull null]])
+                        [userInfo setObject:operation.responseString forKey:@"responseString"];
+                    
+                    NSError *newError = [NSError errorWithDomain:error.domain
+                                                            code:error.code
+                                                        userInfo:userInfo];
+                    
+                    
+                    failure(newError);
+                }];
+    }];
 }
 
 + (void)patchOperation:(NSString*)path queryParams:(NSDictionary*)queryParams
                success:(void (^)(id responseHeader, id responseObject))success
                failure:(void (^)(id responseObject))failure{
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    AFJSONRequestSerializer *serializer = [AFJSONRequestSerializer serializer];
-    [serializer setValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
-      forHTTPHeaderField:@"Authorization"];
-    [serializer setValue:@"" forHTTPHeaderField:@"Accept-Encoding"];
-    
-    manager.requestSerializer = serializer;
-
-    [manager PATCH:path
-        parameters:[NSArray arrayWithObject:[self paramsRemove:self.keysToRemove from:queryParams]]
-            success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                success(operation.response.allHeaderFields, responseObject);
-            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
-                
-                if(![operation.responseString isEqual:[NSNull null]])
-                    [userInfo setObject:operation.responseString forKey:@"responseString"];
-                
-                NSError *newError = [NSError errorWithDomain:error.domain
-                                                        code:error.code
-                                                    userInfo:userInfo];
-                
-                
-                failure(newError);
-            }];
+    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
+        if(error){
+            failure(error);
+            return;
+        }
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        
+        AFJSONRequestSerializer *serializer = [AFJSONRequestSerializer serializer];
+        [serializer setValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
+          forHTTPHeaderField:@"Authorization"];
+        [serializer setValue:@"" forHTTPHeaderField:@"Accept-Encoding"];
+        
+        manager.requestSerializer = serializer;
+        
+        [manager PATCH:path
+            parameters:[NSArray arrayWithObject:[self paramsRemove:self.keysToRemove from:queryParams]]
+               success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                   success(operation.response.allHeaderFields, responseObject);
+               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                   NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+                   
+                   if(![operation.responseString isEqual:[NSNull null]])
+                       [userInfo setObject:operation.responseString forKey:@"responseString"];
+                   
+                   NSError *newError = [NSError errorWithDomain:error.domain
+                                                           code:error.code
+                                                       userInfo:userInfo];
+                   
+                   
+                   failure(newError);
+               }];
+    }];
     
 }
 
@@ -179,48 +205,54 @@ customResponseType:(NSString*)responseType
             customBody:(NSString*)bodyString
                success:(void (^)(id responseHeader, id responseObject))success
                failure:(void (^)(id responseObject))failure{
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:path]];
-    [request setHTTPMethod:@"PATCH"];
-    
-    [request addValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
-   forHTTPHeaderField:@"Authorization"];
-    
-    //set headers
-    NSArray *customHeaderArray = [customHeader allKeys];
-    for(NSString *key in customHeaderArray){
-        [request addValue:[customHeader objectForKey:key] forHTTPHeaderField:key];
-    }
-    
-    //create the body
-    NSMutableData *postBody = [NSMutableData data];
-    [postBody appendData:[bodyString dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    //post
-    [request setHTTPBody:postBody];
-    
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]
-                                         initWithRequest:request];
-    operation.responseSerializer = [AFJSONResponseSerializer serializer];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"status code = %ld", (long)operation.response.statusCode);
+    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
+        if(error){
+            failure(error);
+            return;
+        }
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+        [request setURL:[NSURL URLWithString:path]];
+        [request setHTTPMethod:@"PATCH"];
         
-        success(operation.response.allHeaderFields, responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+        [request addValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
+       forHTTPHeaderField:@"Authorization"];
         
-        if(![operation.responseString isEqual:[NSNull null]])
-            [userInfo setObject:operation.responseString forKey:@"responseString"];
+        //set headers
+        NSArray *customHeaderArray = [customHeader allKeys];
+        for(NSString *key in customHeaderArray){
+            [request addValue:[customHeader objectForKey:key] forHTTPHeaderField:key];
+        }
         
-        NSError *newError = [NSError errorWithDomain:error.domain
-                                                code:error.code
-                                            userInfo:userInfo];
+        //create the body
+        NSMutableData *postBody = [NSMutableData data];
+        [postBody appendData:[bodyString dataUsingEncoding:NSUTF8StringEncoding]];
         
+        //post
+        [request setHTTPBody:postBody];
         
-        failure(newError);
+        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]
+                                             initWithRequest:request];
+        operation.responseSerializer = [AFJSONResponseSerializer serializer];
+        
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"status code = %ld", (long)operation.response.statusCode);
+            
+            success(operation.response.allHeaderFields, responseObject);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+            
+            if(![operation.responseString isEqual:[NSNull null]])
+                [userInfo setObject:operation.responseString forKey:@"responseString"];
+            
+            NSError *newError = [NSError errorWithDomain:error.domain
+                                                    code:error.code
+                                                userInfo:userInfo];
+            
+            
+            failure(newError);
+        }];
+        [operation start];
     }];
-    [operation start];
 }
 
 + (void)post:(NSString*)path
@@ -228,48 +260,53 @@ customHeader:(NSDictionary*)customHeader
   customBody:(NSString*)bodyString
      success:(void (^)(id responseHeader, id responseObject))success
      failure:(void (^)(id responseObject))failure{
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:path]];
-    [request setHTTPMethod:@"POST"];
-
-    [request addValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
-   forHTTPHeaderField:@"Authorization"];
-
-    //set headers
-    NSArray *customHeaderArray = [customHeader allKeys];
-    for(NSString *key in customHeaderArray){
-        [request addValue:[customHeader objectForKey:key] forHTTPHeaderField:key];
-    }
-    //create the body
-    NSMutableData *postBody = [NSMutableData data];
-    [postBody appendData:[bodyString dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    //post
-    [request setHTTPBody:postBody];
-    
-    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]
-                                         initWithRequest:request];
-    operation.responseSerializer = [AFJSONResponseSerializer serializer];
-    
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"status code = %ld", (long)operation.response.statusCode);
+    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
+        if(error){
+            failure(error);
+            return;
+        }
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+        [request setURL:[NSURL URLWithString:path]];
+        [request setHTTPMethod:@"POST"];
         
-        success(operation.response.allHeaderFields, responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+        [request addValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
+       forHTTPHeaderField:@"Authorization"];
         
-        if(![operation.responseString isEqual:[NSNull null]])
-            [userInfo setObject:operation.responseString forKey:@"responseString"];
+        //set headers
+        NSArray *customHeaderArray = [customHeader allKeys];
+        for(NSString *key in customHeaderArray){
+            [request addValue:[customHeader objectForKey:key] forHTTPHeaderField:key];
+        }
+        //create the body
+        NSMutableData *postBody = [NSMutableData data];
+        [postBody appendData:[bodyString dataUsingEncoding:NSUTF8StringEncoding]];
         
-        NSError *newError = [NSError errorWithDomain:error.domain
-                                                code:error.code
-                                            userInfo:userInfo];
+        //post
+        [request setHTTPBody:postBody];
         
+        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]
+                                             initWithRequest:request];
+        operation.responseSerializer = [AFJSONResponseSerializer serializer];
         
-        failure(newError);
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"status code = %ld", (long)operation.response.statusCode);
+            
+            success(operation.response.allHeaderFields, responseObject);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+            
+            if(![operation.responseString isEqual:[NSNull null]])
+                [userInfo setObject:operation.responseString forKey:@"responseString"];
+            
+            NSError *newError = [NSError errorWithDomain:error.domain
+                                                    code:error.code
+                                                userInfo:userInfo];
+            
+            
+            failure(newError);
+        }];
+        [operation start];
     }];
-    [operation start];
 }
 
 + (void)postWithMultipartForm:(NSString*)path
@@ -277,35 +314,39 @@ customHeader:(NSDictionary*)customHeader
              multiformObjects:(NSArray*)multiformObjects
                       success:(void (^)(id responseHeader, id responseObject))success
                       failure:(void (^)(id responseObject))failure{
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    [manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
-                     forHTTPHeaderField:@"Authorization"];
-    
-    
-    [manager POST:path parameters:[self paramsRemove:self.keysToRemove from:queryParams] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-
-        for (MultiformObject *obj in multiformObjects){
-            [formData appendPartWithHeaders:obj.headers body:obj.body];
+    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
+        if(error){
+            failure(error);
+            return;
         }
-    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        success(operation.response.allHeaderFields, responseObject);
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
-        
-        if(![operation.responseString isEqual:[NSNull null]])
-            [userInfo setObject:operation.responseString forKey:@"responseString"];
-        
-        NSError *newError = [NSError errorWithDomain:error.domain
-                                                code:error.code
-                                            userInfo:userInfo];
+        [manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
+                         forHTTPHeaderField:@"Authorization"];
         
         
-        failure(newError);
+        [manager POST:path parameters:[self paramsRemove:self.keysToRemove from:queryParams] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+            
+            for (MultiformObject *obj in multiformObjects){
+                [formData appendPartWithHeaders:obj.headers body:obj.body];
+            }
+        } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            success(operation.response.allHeaderFields, responseObject);
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+            
+            if(![operation.responseString isEqual:[NSNull null]])
+                [userInfo setObject:operation.responseString forKey:@"responseString"];
+            
+            NSError *newError = [NSError errorWithDomain:error.domain
+                                                    code:error.code
+                                                userInfo:userInfo];
+            
+            
+            failure(newError);
+        }];
     }];
-    
 }
 
 @end

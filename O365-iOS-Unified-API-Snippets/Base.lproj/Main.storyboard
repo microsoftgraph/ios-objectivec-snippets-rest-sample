@@ -48,18 +48,18 @@
                                     <constraint firstAttribute="width" constant="100" id="tjg-Lb-ViE"/>
                                 </constraints>
                             </imageView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" textAlignment="right" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sds-WU-pG5">
-                                <rect key="frame" x="44" y="220" width="380" height="79"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" text="Connect to Office 365" textAlignment="right" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sds-WU-pG5">
+                                <rect key="frame" x="44" y="241" width="380" height="37"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="380" id="M5Q-bb-4gb"/>
                                 </constraints>
-                                <string key="text">Sign in with the account provided 
-by your work or school to use with 
-Office 365 or other Microsoft services</string>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="9up-aU-wHb">
+                                <rect key="frame" x="290" y="290" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -67,9 +67,11 @@ Office 365 or other Microsoft services</string>
                             <constraint firstItem="4Gy-Ac-EGs" firstAttribute="bottom" secondItem="15X-WN-gxj" secondAttribute="bottom" id="71D-00-YI4"/>
                             <constraint firstAttribute="centerY" secondItem="4Gy-Ac-EGs" secondAttribute="centerY" constant="40" id="98Y-0J-Rfv"/>
                             <constraint firstItem="4Gy-Ac-EGs" firstAttribute="top" secondItem="15X-WN-gxj" secondAttribute="top" id="A0O-4P-PzE"/>
+                            <constraint firstAttribute="centerY" secondItem="9up-aU-wHb" secondAttribute="centerY" id="Q3Z-kv-kIc"/>
                             <constraint firstItem="Sds-WU-pG5" firstAttribute="centerY" secondItem="4Gy-Ac-EGs" secondAttribute="centerY" id="USE-I8-ITS"/>
                             <constraint firstItem="Sds-WU-pG5" firstAttribute="top" secondItem="4Gy-Ac-EGs" secondAttribute="top" id="bTt-3E-7xX"/>
                             <constraint firstAttribute="trailingMargin" secondItem="4Gy-Ac-EGs" secondAttribute="trailing" constant="30" id="fAB-yx-hdw"/>
+                            <constraint firstAttribute="centerX" secondItem="9up-aU-wHb" secondAttribute="centerX" id="gXp-Lw-ZmT"/>
                             <constraint firstItem="Sds-WU-pG5" firstAttribute="leading" secondItem="15X-WN-gxj" secondAttribute="leading" id="ooM-No-e70"/>
                             <constraint firstItem="Sds-WU-pG5" firstAttribute="leading" secondItem="gXb-5n-vxH" secondAttribute="leadingMargin" id="vcr-TO-6fH"/>
                             <constraint firstItem="4Gy-Ac-EGs" firstAttribute="trailing" secondItem="15X-WN-gxj" secondAttribute="trailing" id="wWw-Kc-zXp"/>
@@ -82,6 +84,8 @@ Office 365 or other Microsoft services</string>
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="9up-aU-wHb" id="QUh-3v-6gE"/>
+                        <outlet property="connectButton" destination="15X-WN-gxj" id="X52-50-5a5"/>
                         <segue destination="H1p-Uh-vWS" kind="show" identifier="showSplitView" id="TvK-qq-6fN"/>
                     </connections>
                 </viewController>

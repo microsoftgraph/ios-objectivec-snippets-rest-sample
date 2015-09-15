@@ -38,7 +38,7 @@
 }
 
 - (void)signOut:(id)sender{
-    [[AuthenticationManager sharedInstance] disconnect];
+    [[AuthenticationManager sharedInstance] clearCredentials];
     [self dismissViewControllerAnimated:YES completion:^{
         ;
     }];

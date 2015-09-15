@@ -4,51 +4,45 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "AuthHelperDelegate.h"
-
-@class ADAuthenticationResult;
-
-/**
- *  Authentication Delegates
- *  This delegate is used for callbacks on authentication
- */
-@protocol AuthManagerDelegates <NSObject>
-
-- (void) authSuccess;
-- (void) authFailure:(NSError*)error;
-- (void) authDisconnect:(NSError*)error;
-
-@end
-
+#import <ADAuthenticationContext.h>
 
 /**
  *  AuthenticationManager
  *  This class is used as an interface between a UIViewController and authentication.
  *  If additional authentication mechanisms are used, this class is scalable.
  */
-@interface AuthenticationManager : NSObject <AuthHelperDelegate>
 
-@property (nonatomic, assign) BOOL isO365Connected;
+@interface AuthenticationManager : NSObject
 
-@property (nonatomic, strong) NSString *userId;
-@property (nonatomic, strong) NSString *emailAddress;
++ (AuthenticationManager*)sharedInstance;
 
-@property (nonatomic, weak) id<AuthManagerDelegates> authDelegate;
+- (void)initWithAuthority:(NSString*)authority
+                 clientId:(NSString*)clientId
+              redirectURI:(NSString*)redirectURI
+               resourceID: (NSString*)resourceID
+               completion:(void (^)(ADAuthenticationError *error))completion;
 
 @property (nonatomic, strong) NSString *accessToken;
 @property (nonatomic, strong) NSString *refreshToken;
 @property (nonatomic, strong) NSDate *expiresDate;
 
-+ (AuthenticationManager *)sharedInstance;
+@property (nonatomic, strong) NSString *givenName;
+@property (nonatomic, strong) NSString *familyName;
+@property (nonatomic, strong) NSString *userID;
 
-// Connect O365 account
-- (void) connectO365;
+// Acquire token
+- (void)acquireAuthTokenWithResource:(NSString *)resourceID
+                            clientID:(NSString*)clientID
+                         redirectURI:(NSURL*)redirectURI
+                          Completion:(void (^)(ADAuthenticationError *error))completion;
 
-// Clear everything on disconnect
-- (void) disconnect;
+-(void) acquireAuthTokenCompletion:(void (^)(ADAuthenticationError *error))completion;
+
+// Clears the ADAL token cache and the cookie cache.
+- (void) clearCredentials;
 
 // Check and refresh tokens if needed
-- (void)checkAndRefreshToken;
+- (void)checkAndRefreshToken:(void (^)(ADAuthenticationError *error))completion;
 
 @end
 
