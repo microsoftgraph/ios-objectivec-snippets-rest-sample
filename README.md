@@ -22,7 +22,7 @@ The Office 365 unified API exposes multiple APIs from Microsoft cloud services t
 * A client id and redirect uri values of an application registered in Azure. This sample must be registered and granted specific permissions for the **Office 365 unified API (preview)**. To learn how to create this registration, see [Add a native client application in Azure](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding). Next, to assign the correct permissions to the registration, see [grant proper permissions](https://github.com/OfficeDev/O365-iOS-Unified-API-Snippets/wiki/Grant-permissions-to-the-Snippets-application-in-Azure) in the repository wiki. 
 
 
-## Opening the sample using Xcode
+## Running this sample in Xcode
 
 1. Clone this repository
 2. Use CocoaPods to import the Active Directory Authentication Library (ADAL) iOS dependency:
@@ -36,7 +36,7 @@ The Office 365 unified API exposes multiple APIs from Microsoft cloud services t
    For more information, see **Using CocoaPods** in [Additional Resources](#AdditionalResources)
   
 3. Open **O365-iOS-Unified-API-Snippets.xcworkspace**
-4. Open **ConnectViewController.m**. Ensure you have completed the third bullet point in the prerequisites section, including registering your app in Microsoft Azure, configuring the proper permissions as specified, and obtaining the **ClientID** and **RedirectUri** values from the registration. You'll see that the **ClientID** and **RedirectUri** values can be added to the top of the file. Supply the necessary values here:
+4. Open **ConnectViewController.m** under the **Controllers** folder in the project. Ensure you have completed the third bullet point in the prerequisites section, including registering your app in Microsoft Azure, configuring the proper permissions as specified, and obtaining the **ClientID** and **RedirectUri** values from the registration. You'll see that the **ClientID** and **RedirectUri** values can be added to the top of the file. Supply the necessary values here:
 
         // You will set your application's clientId and redirect URI. You get
         // these when you register your application in Microsoft Azure.
@@ -46,7 +46,7 @@ The Office 365 unified API exposes multiple APIs from Microsoft cloud services t
     
     > Note: If you have don't have CLIENT_ID and REDIRECT_URI values, [add a native client application in Azure](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding) and take note of the CLIENT\_ID and REDIRECT_URI.
 
-Run the sample once above steps are complete.
+5.Run the sample
 
 To learn more about the sample, visit our [understanding the code](https://github.com/OfficeDev/O365-iOS-Unified-API-Snippets/wiki) wiki page.
 
