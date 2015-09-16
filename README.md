@@ -46,7 +46,7 @@ This sample app already contains a podfile that will get the necessary component
         NSString * const kResourceId  = @"https://graph.microsoft.com";
         NSString * const kAuthority   = @"https://login.microsoftonline.com/common";
     
-    > Note: If you have don't have CLIENT_ID and REDIRECT_URI values, [add a native client application in Azure](https://msdn.microsoft.com/library/azure/dn132599.aspx#BKMK_Adding) and take note of the CLIENT\_ID and REDIRECT_URI.
+    > Note: If you have don't have CLIENT_ID and REDIRECT_URI values, see [Register your native app with the Azure Management Portal](https://msdn.microsoft.com/office/office365/howto/add-common-consent-manually) and take note of the CLIENT\_ID and REDIRECT_URI.
 
 5.Run the sample
 
