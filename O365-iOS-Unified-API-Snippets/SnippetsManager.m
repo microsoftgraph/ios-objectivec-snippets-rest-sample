@@ -216,7 +216,7 @@
     
     //NSString *payload = @"{Subject: 'Weekly Sync', Location: { DisplayName: 'Water cooler'";
     Operation *operation = [[Operation alloc] initWithOperationName:@"PATCH: Update an event"
-                                                          urlString:[NSString stringWithFormat:@"/me/events/{%@}", ParamsEventIDKey]
+                                                          urlString:[self createURLString[NSString stringWithFormat:@"/me/events/{%@}", ParamsEventIDKey]]
                                                       operationType:OperationPatchCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
@@ -234,7 +234,7 @@
 // Deletes an event from user's calendar
 -(Operation*) deleteCalendarEvent{
     Operation *operation = [[Operation alloc] initWithOperationName:@"DELETE: Delete an event"
-                                                          urlString:[NSString stringWithFormat:@"/me/events/{%@}", ParamsEventIDKey]
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/me/events/{%@}", ParamsEventIDKey]]
                                                       operationType:OperationDelete
                                                         description:@"Creates and adds an event to the signed-in user's calendar, then deletes the event."
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Event"
@@ -374,7 +374,7 @@
 // Gets information about a specific group in the tenant by ID.
 - (Operation*) getSpecificGroup{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get specific group by ID"
-                                                          urlString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}", ParamsGroupIDKey]
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}", ParamsGroupIDKey]]
                                                       operationType:OperationGet
                                                         description:@"Gets information about a specific group in the tenant by ID."
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Group"
@@ -389,7 +389,7 @@
     NSMutableString *payload = [NSMutableString stringWithString:[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]];
     
     Operation *operation = [[Operation alloc] initWithOperationName:@"PATCH: Updates specific group"
-                                                          urlString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}", ParamsGroupIDKey]
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}", ParamsGroupIDKey]]
                                                       operationType:OperationPatchCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
@@ -406,7 +406,7 @@
 // Deletes a group
 - (Operation*) deleteGroup{
     Operation *operation = [[Operation alloc] initWithOperationName:@"DELETE: Delete a group"
-                                                          urlString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}", ParamsGroupIDKey]
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}", ParamsGroupIDKey]]
                                                       operationType:OperationDelete
                                                         description:@"Deletes a group."
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Group"
@@ -418,7 +418,7 @@
 // Gets a specific group's members
 - (Operation*) getGroupMembers{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get specific group members"
-                                                          urlString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}/members", ParamsGroupIDKey]
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}/members", ParamsGroupIDKey]]
                                                       operationType:OperationGet
                                                         description:@"Gets a specific group's members."
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_members"
@@ -430,7 +430,7 @@
 // Gets a specific group's owners
 - (Operation*) getGroupOwners{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get specific group owners"
-                                                          urlString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}/owners", ParamsGroupIDKey]
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}/owners", ParamsGroupIDKey]]
                                                       operationType:OperationGet
                                                         description:@"Gets a specific group's owners."
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_owners"
