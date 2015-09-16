@@ -108,7 +108,12 @@
 // Create new user - newUserData.json
 - (Operation*) createNewUser{
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"newUserData" ofType:@"json"];
-    NSString *payload = [[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil] stringByReplacingOccurrencesOfString:@"<USER>" withString:[[NSProcessInfo processInfo] globallyUniqueString]];
+    
+    NSString *userId = [[NSProcessInfo processInfo] globallyUniqueString];
+    NSString *domainName = [[[[AuthenticationManager sharedInstance] userID] componentsSeparatedByString:@"@"] lastObject];
+    NSString *payload = [[[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]
+                          stringByReplacingOccurrencesOfString:@"<USER>" withString:userId]
+                         stringByReplacingOccurrencesOfString:@"<DOMAIN>" withString:domainName];
     
     Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Create a new user"
                                                           urlString:[self createURLString:@"/myOrganization/users"]

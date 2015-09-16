@@ -6,5 +6,5 @@
         "password": "p@ssw0rd!",
         "forceChangePasswordNextLogin": false
     },
-    "userPrincipalName": "<USER>@patsoldemo6.onmicrosoft.com"
+    "userPrincipalName": "<USER>@<DOMAIN>"
 }
