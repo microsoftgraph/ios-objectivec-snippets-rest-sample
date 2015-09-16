@@ -93,6 +93,8 @@ customResponseType:(NSString*)responseType
  queryParams:(NSDictionary*)queryParams
      success:(void (^)(id responseHeader, id responseObject))success
      failure:(void (^)(id responseObject))failure{
+    
+    NSLog(@"%@", path);
     [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
         if(error){
             failure(error);
@@ -201,6 +203,8 @@ customResponseType:(NSString*)responseType
             customBody:(NSString*)bodyString
                success:(void (^)(id responseHeader, id responseObject))success
                failure:(void (^)(id responseObject))failure{
+         NSLog(@"%@", path);
+    
     [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
         if(error){
             failure(error);
@@ -256,6 +260,9 @@ customHeader:(NSDictionary*)customHeader
   customBody:(NSString*)bodyString
      success:(void (^)(id responseHeader, id responseObject))success
      failure:(void (^)(id responseObject))failure{
+    
+        NSLog(@"%@", path);
+    
     [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
         if(error){
             failure(error);

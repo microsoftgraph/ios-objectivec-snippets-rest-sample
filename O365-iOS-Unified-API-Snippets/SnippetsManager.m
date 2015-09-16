@@ -22,7 +22,6 @@
         // Initialize sections
         _sections = @[@"Users",
                       @"Groups",
-                      @"Drives",
                       @"Contacts"];
         
         // Initialize operations
@@ -42,19 +41,16 @@
         [usersArray addObject:[self getUserDrive]];
         [usersArray addObject:[self getUserEvents]];
         [usersArray addObject:[self addNewCalendarEvent]];  // create new event
-
+        
         [usersArray addObject:[self updateCalendarEvent]];
         [usersArray addObject:[self deleteCalendarEvent]];
-
+        
         [usersArray addObject:[self getUserMessages]];
         [usersArray addObject:[self createAndSendMessage]];
-        [usersArray addObject:[self createDraftMessage]];
         
         [usersArray addObject:[self getUserContacts]];
         [usersArray addObject:[self getUserManager]];
         [usersArray addObject:[self getUserReports]];
-        [usersArray addObject:[self getWhatIsTrending]];
-        [usersArray addObject:[self getSeeWhoUserIsWorkingWith]];
         [usersArray addObject:[self getUserPhoto]];
         [usersArray addObject:[self getUserGroupMembership]];
         
@@ -65,28 +61,18 @@
         [groupsArray addObject:[self getSpecificGroup]];
         [groupsArray addObject:[self updateGroup]];
         [groupsArray addObject:[self deleteGroup]];
-        
-        [groupsArray addObject:[self getGroupFiles]];
         [groupsArray addObject:[self getGroupMembers]];
         [groupsArray addObject:[self getGroupOwners]];
         
-        // Section 3 - Drives
-        NSMutableArray *drivesArray = [NSMutableArray new];
-        [drivesArray addObject:[self getDrivesInTenant]];
-        
-        // Section 4 - Contacts
+        // Section 3 - Contacts
         NSMutableArray *contactsArray = [NSMutableArray new];
         [contactsArray addObject:[self getContactsInTenant]];
-        [contactsArray addObject:[self createNewContact]];
-
-        
         
         // Add sections to the array
         [_operationsArray addObject:usersArray];
         [_operationsArray addObject:groupsArray];
-        [_operationsArray addObject:drivesArray];
         [_operationsArray addObject:contactsArray];
-
+        
         
     }
     return self;
@@ -97,12 +83,12 @@
 //Returns all of the users in your tenant's directory.
 - (Operation*) getUsersInTenant{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get users in tenant"
-                                          urlString:@"https://graph.microsoft.com/beta/myOrganization/users"
-                                      operationType:OperationGet
-                                        description:@"Returns all of the users in your tenant's directory"
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_User"
-                                             params:nil
-                                       paramsSource:nil];
+                                                          urlString:[self createURLString:@"/myOrganization/users"]
+                                                      operationType:OperationGet
+                                                        description:@"Returns all of the users in your tenant's directory"
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_User"
+                                                             params:nil
+                                                       paramsSource:nil];
     
     return operation;
 }
@@ -110,12 +96,12 @@
 //Returns all of the users in your tenant's directory.
 - (Operation*) getSelectUsersInTenant{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get select users in a tenant"
-                                          urlString:@"https://graph.microsoft.com/beta/myOrganization/users"
-                                      operationType:OperationGet
-                                        description:@"Returns all of the users in your tenant's directory who are from the United States, using $filter."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_User"
-                                             params:@{@"$filter":@"country eq 'United States'"}
-                                       paramsSource:@{@"$filter":@(ParamsSourceTextEdit)}];
+                                                          urlString:[self createURLString:@"/myOrganization/users"]
+                                                      operationType:OperationGet
+                                                        description:@"Returns all of the users in your tenant's directory who are from the United States, using $filter."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_User"
+                                                             params:@{@"$filter":@"country eq 'United States'"}
+                                                       paramsSource:@{@"$filter":@(ParamsSourceTextEdit)}];
     return operation;
 }
 
@@ -125,7 +111,7 @@
     NSString *payload = [[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil] stringByReplacingOccurrencesOfString:@"<USER>" withString:[[NSProcessInfo processInfo] globallyUniqueString]];
     
     Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Create a new user"
-                                                          urlString:@"https://graph.microsoft.com/beta/myOrganization/users"
+                                                          urlString:[self createURLString:@"/myOrganization/users"]
                                                       operationType:OperationPostCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
@@ -142,12 +128,12 @@
 //Returns the user's profile.
 - (Operation*) getUserProfile{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's profile"
-                                          urlString:@"https://graph.microsoft.com/beta/me"
-                                      operationType:OperationGet
-                                        description:@"Returns all of the users in your tenant's directory who are from the United States, using $filter."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_User"
-                                             params:nil
-                                       paramsSource:nil];
+                                                          urlString:[self createURLString:@"/me"]
+                                                      operationType:OperationGet
+                                                        description:@"Returns all of the users in your tenant's directory who are from the United States, using $filter."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_User"
+                                                             params:nil
+                                                       paramsSource:nil];
     return operation;
 }
 
@@ -157,12 +143,12 @@
 //Returns select information about the signed-in user from Azure Active Directory.
 -(Operation*) getPropertiesUserProfile{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get select properties of user's profile"
-                                          urlString:@"https://graph.microsoft.com/beta/me"
-                                      operationType:OperationGet
-                                        description:@"Returns select information about the signed-in user from Azure Active Directory."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_User"
-                                             params:@{@"$select":@"AboutMe,Responsibilities,Tags"}
-                                       paramsSource:@{@"$filter":@(ParamsSourceTextEdit)}];
+                                                          urlString:[self createURLString:@"/me"]
+                                                      operationType:OperationGet
+                                                        description:@"Returns select information about the signed-in user from Azure Active Directory."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_User"
+                                                             params:@{@"$select":@"AboutMe,Responsibilities,Tags"}
+                                                       paramsSource:@{@"$filter":@(ParamsSourceTextEdit)}];
     return operation;
 }
 
@@ -170,12 +156,12 @@
 //Gets the signed-in user's drive from SharePoint Online.
 - (Operation*) getUserDrive{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's drive"
-                                          urlString:@"https://graph.microsoft.com/beta/me/drive"
-                                      operationType:OperationGet
-                                        description:@"Gets the signed-in user's drive from SharePoint Online."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Drive"
-                                             params:nil
-                                       paramsSource:nil];
+                                                          urlString:[self createURLString:@"/me/drive"]
+                                                      operationType:OperationGet
+                                                        description:@"Gets the signed-in user's drive from SharePoint Online."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Drive"
+                                                             params:nil
+                                                       paramsSource:nil];
     return operation;
 }
 
@@ -183,12 +169,12 @@
 //Gets the signed-in user's events from Exchange Online.
 - (Operation*) getUserEvents{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's events"
-                                          urlString:@"https://graph.microsoft.com/beta/me/events"
-                                      operationType:OperationGet
-                                        description:@"Gets the signed-in user's events from Exchange Online."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Event"
-                                             params:nil
-                                       paramsSource:nil];
+                                                          urlString:[self createURLString:@"/me/events"]
+                                                      operationType:OperationGet
+                                                        description:@"Gets the signed-in user's events from Exchange Online."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Event"
+                                                             params:@{@"$select":@"id, Subject"}
+                                                       paramsSource:@{@"$select":@(ParamsSourceTextEdit)}];
     return operation;
 }
 
@@ -206,7 +192,7 @@
                          stringByReplacingOccurrencesOfString:@"<ENDDATETIME>" withString:[dateFormatter stringFromDate:endDate]];
     
     Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Add a new event"
-                                                          urlString:@"https://graph.microsoft.com/beta/me/events"
+                                                          urlString:[self createURLString:@"/me/events"]
                                                       operationType:OperationPostCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
@@ -219,13 +205,13 @@
 
 // Updates the event from user's calendar - eventDataPatch.json
 - (Operation*) updateCalendarEvent{
- 
+    
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"eventDataPatch" ofType:@"json"];
     NSMutableString *payload = [NSMutableString stringWithString:[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]];
     
     //NSString *payload = @"{Subject: 'Weekly Sync', Location: { DisplayName: 'Water cooler'";
     Operation *operation = [[Operation alloc] initWithOperationName:@"PATCH: Update an event"
-                                                          urlString:[NSString stringWithFormat:@"https://graph.microsoft.com/beta/me/events/{%@}", ParamsEventIDKey]
+                                                          urlString:[NSString stringWithFormat:@"/me/events/{%@}", ParamsEventIDKey]
                                                       operationType:OperationPatchCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
@@ -243,12 +229,12 @@
 // Deletes an event from user's calendar
 -(Operation*) deleteCalendarEvent{
     Operation *operation = [[Operation alloc] initWithOperationName:@"DELETE: Delete an event"
-                                          urlString:[NSString stringWithFormat: @"https://graph.microsoft.com/beta/me/events/{%@}", ParamsEventIDKey]
-                                      operationType:OperationDelete
-                                        description:@"Creates and adds an event to the signed-in user's calendar, then deletes the event."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Event"
-                                             params:@{ParamsEventIDKey: @""}
-                                       paramsSource:@{ParamsEventIDKey: @(ParamsSourceGetEvents)}];
+                                                          urlString:[NSString stringWithFormat:@"/me/events/{%@}", ParamsEventIDKey]
+                                                      operationType:OperationDelete
+                                                        description:@"Creates and adds an event to the signed-in user's calendar, then deletes the event."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Event"
+                                                             params:@{ParamsEventIDKey: @""}
+                                                       paramsSource:@{ParamsEventIDKey: @(ParamsSourceGetEvents)}];
     return operation;
 }
 
@@ -256,12 +242,12 @@
 //Gets the signed-in user's messages from Office 365.
 - (Operation*) getUserMessages{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's messages"
-                                          urlString:@"https://graph.microsoft.com/beta/me/messages"
-                                      operationType:OperationGet
-                                        description:@"Gets the signed-in user's messages from Office 365."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_Messages"
-                                             params:nil
-                                       paramsSource:nil];
+                                                          urlString:[self createURLString:@"/me/messages"]
+                                                      operationType:OperationGet
+                                                        description:@"Gets the signed-in user's messages from Office 365."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_Messages"
+                                                             params:nil
+                                                       paramsSource:nil];
     return operation;
 }
 
@@ -271,11 +257,11 @@
     
     // replace email address to self
     NSString *payload = [[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]
-                            stringByReplacingOccurrencesOfString:@"<EMAIL>" withString:[[AuthenticationManager sharedInstance] userID]];
+                         stringByReplacingOccurrencesOfString:@"<EMAIL>" withString:[[AuthenticationManager sharedInstance] userID]];
     
     
     Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Create and send message to user"
-                                                          urlString:@"https://graph.microsoft.com/beta/me/sendMail"
+                                                          urlString:[self createURLString:@"/me/sendMail"]
                                                       operationType:OperationPostCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
@@ -283,44 +269,19 @@
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_action_user_sendMail"
                                                              params:@{ParamsPostDataKey:payload}
                                                        paramsSource:@{ParamsPostDataKey:@(ParamsSourcePostData)}];
-
-    return operation;
-}
-
-// Create a draft message in the Inbox folder - emailDraftData.json
-- (Operation*) createDraftMessage{
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"emailDraftData" ofType:@"json"];
     
-    // replace email address to self
-    NSString *payload = [[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]
-                         stringByReplacingOccurrencesOfString:@"<EMAIL>" withString:[[AuthenticationManager sharedInstance] userID]];
-
-    Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Create a draft message"
-                                                          urlString:@"https://graph.microsoft.com/beta/me/messages"
-                                                      operationType:OperationPostCustom
-                                                       customHeader:@{@"content-type":@"application/json"}
-                                                         customBody:payload
-                                                        description:@"Create a draft message"
-                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_Messages"
-                                                             params:@{ParamsPostDataKey:payload}
-                                                       paramsSource:@{ParamsPostDataKey:@(ParamsSourcePostData)}];
     return operation;
 }
-
-
-
-
-
 
 //Gets the signed-in user's contacts.
 - (Operation*) getUserContacts{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's contacts"
-                                          urlString:@"https://graph.microsoft.com/beta/me/contacts"
-                                      operationType:OperationGet
-                                        description:@"Gets the signed-in user's contacts."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Contact"
-                                             params:nil
-                                       paramsSource:nil];
+                                                          urlString:[self createURLString:@"/me/contacts"]
+                                                      operationType:OperationGet
+                                                        description:@"Gets the signed-in user's contacts."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Contact"
+                                                             params:nil
+                                                       paramsSource:nil];
     return operation;
 }
 
@@ -328,72 +289,48 @@
 //GET: Get user's manager
 - (Operation*) getUserManager{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's manager"
-                                          urlString:@"https://graph.microsoft.com/beta/me/manager"
-                                      operationType:OperationGet
-                                        description:@"GET: Get user's manager"
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_manager"
-                                             params:nil
-                                       paramsSource:nil];
+                                                          urlString:[self createURLString:@"/me/manager"]
+                                                      operationType:OperationGet
+                                                        description:@"GET: Get user's manager"
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_manager"
+                                                             params:nil
+                                                       paramsSource:nil];
     return operation;
 }
 
 //Gets the signed-in user's direct reports.
 - (Operation*) getUserReports{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's direct reports"
-                                          urlString:@"https://graph.microsoft.com/beta/me/directReports"
-                                      operationType:OperationGet
-                                        description:@"Gets the signed-in user's direct reports."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_directReports"
-                                             params:nil
-                                       paramsSource:nil];
-    return operation;
-}
-
-//Gets a collection of files trending around the signed-in user.
-- (Operation*) getWhatIsTrending{
-    Operation *operation = [[Operation alloc] initWithOperationName:@"GET: See what's trending"
-                                          urlString:@"https://graph.microsoft.com/beta/me/trendingAround"
-                                      operationType:OperationGet
-                                        description:@"Gets a collection of files trending around the signed-in user."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_TrendingAround"
-                                             params:nil
-                                       paramsSource:nil];
-    return operation;
-}
-
-//Gets a collection of users working with the signed-in user.
-- (Operation*) getSeeWhoUserIsWorkingWith{
-    Operation *operation = [[Operation alloc] initWithOperationName:@"GET: See who user is working with"
-                                          urlString:@"https://graph.microsoft.com/beta/me/workingWith"
-                                      operationType:OperationGet
-                                        description:@"Gets a collection of files trending around the signed-in user."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_WorkingWith"
-                                             params:nil
-                                       paramsSource:nil];
+                                                          urlString:[self createURLString:@"/me/directReports"]
+                                                      operationType:OperationGet
+                                                        description:@"Gets the signed-in user's direct reports."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_directReports"
+                                                             params:nil
+                                                       paramsSource:nil];
     return operation;
 }
 
 //Gets the signed-in user's photo.
 - (Operation*) getUserPhoto{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's photo"
-                                          urlString:@"https://graph.microsoft.com/beta/me/userPhoto"
-                                      operationType:OperationGet
-                                        description:@"Gets the signed-in user's photo."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_UserPhoto"
-                                             params:nil
-                                       paramsSource:nil];
+                                                          urlString:[self createURLString:@"/me/userPhoto"]
+                                                      operationType:OperationGet
+                                                        description:@"Gets the signed-in user's photo."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_UserPhoto"
+                                                             params:nil
+                                                       paramsSource:nil];
     return operation;
 }
 
 //Gets a collection of groups that the signed-in user is a member of.
 - (Operation*) getUserGroupMembership{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user group membership"
-                                          urlString:@"https://graph.microsoft.com/beta/me/memberOf"
-                                      operationType:OperationGet
-                                        description:@"Gets a collection of groups that the signed-in user is a member of."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_memberOf"
-                                             params:nil
-                                       paramsSource:nil];
+                                                          urlString:[self createURLString:@"/me/memberOf"]
+                                                      operationType:OperationGet
+                                                        description:@"Gets a collection of groups that the signed-in user is a member of."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_memberOf"
+                                                             params:nil
+                                                       paramsSource:nil];
     return operation;
 }
 
@@ -402,12 +339,12 @@
 //Returns all of the groups in your tenant's directory.
 - (Operation*) getGroupsInTenant{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get groups in tenant"
-                                          urlString:@"https://graph.microsoft.com/beta/myOrganization/groups"
-                                      operationType:OperationGet
-                                        description:@"Returns all of the groups in your tenant's directory"
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entitySet_groups"
-                                             params:nil
-                                       paramsSource:nil];
+                                                          urlString:[self createURLString:@"/myOrganization/groups"]
+                                                      operationType:OperationGet
+                                                        description:@"Returns all of the groups in your tenant's directory"
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entitySet_groups"
+                                                             params:nil
+                                                       paramsSource:nil];
     return operation;
 }
 
@@ -418,7 +355,7 @@
     NSString *payload = [[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil] stringByReplacingOccurrencesOfString:@"<GROUP>" withString:[[NSProcessInfo processInfo] globallyUniqueString]];
     
     Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Add a new security group"
-                                                          urlString:@"https://graph.microsoft.com/beta/myOrganization/groups"
+                                                          urlString:[self createURLString:@"/myOrganization/groups"]
                                                       operationType:OperationPostCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
@@ -432,12 +369,12 @@
 // Gets information about a specific group in the tenant by ID.
 - (Operation*) getSpecificGroup{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get specific group by ID"
-                                          urlString:[NSString stringWithFormat: @"https://graph.microsoft.com/beta/myOrganization/groups/{%@}", ParamsGroupIDKey]
-                                      operationType:OperationGet
-                                        description:@"Gets information about a specific group in the tenant by ID."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Group"
-                                             params:@{ParamsGroupIDKey:@""}
-                                       paramsSource:@{ParamsGroupIDKey:@(ParamsSourceGetGroups)}];
+                                                          urlString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}", ParamsGroupIDKey]
+                                                      operationType:OperationGet
+                                                        description:@"Gets information about a specific group in the tenant by ID."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Group"
+                                                             params:@{ParamsGroupIDKey:@""}
+                                                       paramsSource:@{ParamsGroupIDKey:@(ParamsSourceGetGroups)}];
     return operation;
 }
 
@@ -447,7 +384,7 @@
     NSMutableString *payload = [NSMutableString stringWithString:[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]];
     
     Operation *operation = [[Operation alloc] initWithOperationName:@"PATCH: Updates specific group"
-                                                          urlString:[NSString stringWithFormat: @"https://graph.microsoft.com/beta/myOrganization/groups/{%@}", ParamsGroupIDKey]
+                                                          urlString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}", ParamsGroupIDKey]
                                                       operationType:OperationPatchCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
@@ -464,100 +401,52 @@
 // Deletes a group
 - (Operation*) deleteGroup{
     Operation *operation = [[Operation alloc] initWithOperationName:@"DELETE: Delete a group"
-                                          urlString:[NSString stringWithFormat: @"https://graph.microsoft.com/beta/myOrganization/groups/{%@}", ParamsGroupIDKey]
-                                      operationType:OperationDelete
-                                        description:@"Deletes a group."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Group"
-                                             params:@{ParamsGroupIDKey:@""}
-                                       paramsSource:@{ParamsGroupIDKey:@(ParamsSourceGetGroups)}];
-    return operation;
-}
-
-// Gets a specific group's files
-- (Operation*) getGroupFiles{
-    Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get specific group files"
-                                          urlString:[NSString stringWithFormat: @"https://graph.microsoft.com/beta/myOrganization/groups/{%@}/files", ParamsGroupIDKey]
-                                      operationType:OperationGet
-                                        description:@"Gets a specific group's files."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_File"
-                                             params:@{ParamsGroupIDKey:@""}
-                                       paramsSource:@{ParamsGroupIDKey:@(ParamsSourceGetGroups)}];
+                                                          urlString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}", ParamsGroupIDKey]
+                                                      operationType:OperationDelete
+                                                        description:@"Deletes a group."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Group"
+                                                             params:@{ParamsGroupIDKey:@""}
+                                                       paramsSource:@{ParamsGroupIDKey:@(ParamsSourceGetGroups)}];
     return operation;
 }
 
 // Gets a specific group's members
 - (Operation*) getGroupMembers{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get specific group members"
-                                          urlString:[NSString stringWithFormat: @"https://graph.microsoft.com/beta/myOrganization/groups/{%@}/members", ParamsGroupIDKey]
-                                      operationType:OperationGet
-                                        description:@"Gets a specific group's members."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_members"
-                                             params:@{ParamsGroupIDKey:@""}
-                                       paramsSource:@{ParamsGroupIDKey:@(ParamsSourceGetGroups)}];
+                                                          urlString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}/members", ParamsGroupIDKey]
+                                                      operationType:OperationGet
+                                                        description:@"Gets a specific group's members."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_members"
+                                                             params:@{ParamsGroupIDKey:@""}
+                                                       paramsSource:@{ParamsGroupIDKey:@(ParamsSourceGetGroups)}];
     return operation;
 }
 
 // Gets a specific group's owners
 - (Operation*) getGroupOwners{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get specific group owners"
-                                          urlString:[NSString stringWithFormat: @"https://graph.microsoft.com/beta/myOrganization/groups/{%@}/owners", ParamsGroupIDKey]
-                                      operationType:OperationGet
-                                        description:@"Gets a specific group's owners."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_owners"
-                                             params:@{ParamsGroupIDKey:@""}
-                                       paramsSource:@{ParamsGroupIDKey:@(ParamsSourceGetGroups)}];
+                                                          urlString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}/owners", ParamsGroupIDKey]
+                                                      operationType:OperationGet
+                                                        description:@"Gets a specific group's owners."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_owners"
+                                                             params:@{ParamsGroupIDKey:@""}
+                                                       paramsSource:@{ParamsGroupIDKey:@(ParamsSourceGetGroups)}];
     return operation;
 }
-
-
-
-#pragma mark - Drive Snippets
-
-
-//Returns all of the drives in your tenant's directory.
-- (Operation*) getDrivesInTenant{
-    Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get drives in tenant"
-                                          urlString:@"https://graph.microsoft.com/beta/myOrganization/drives"
-                                      operationType:OperationGet
-                                        description:@"Returns all of the drives in your tenant's directory."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entitySet_drives"
-                                             params:nil
-                                       paramsSource:nil];
-    return operation;
-}
-
-
 
 #pragma mark - Contacts Snippets
 
 //Returns all of the contacts in your tenant's directory.
 - (Operation*) getContactsInTenant{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get contacts in tenant"
-                                          urlString:@"https://graph.microsoft.com/beta/myOrganization/contacts"
-                                      operationType:OperationGet
-                                        description:@"Returns all of the contacts in your tenant's directory."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entitySet_contacts"
-                                             params:nil
-                                       paramsSource:nil];
+                                                          urlString:[self createURLString:@"/myOrganization/contacts"]
+                                                      operationType:OperationGet
+                                                        description:@"Returns all of the contacts in your tenant's directory."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entitySet_contacts"
+                                                             params:nil
+                                                       paramsSource:nil];
     return operation;
 }
-
-
-//Adds a contact to the contacts collection in your tenant's directory.
-- (Operation*) createNewContact{
-    Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Add a contact"
-                                          urlString:@"https://graph.microsoft.com/beta/myOrganization/contacts"
-                                      operationType:OperationPost
-                                        description:@"Adds a contact to the contacts collection in your tenant's directory."
-                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entitySet_contacts"
-                                             params:@{@"name":@"contact name"}
-                                       paramsSource:@{@"name":@(ParamsSourceTextEdit)}];
-    return operation;    
-}
-
-
-
-#pragma mark - Pages Snippets
 
 #pragma mark - helper
 - (NSString*) createURLString:(NSString*)path{

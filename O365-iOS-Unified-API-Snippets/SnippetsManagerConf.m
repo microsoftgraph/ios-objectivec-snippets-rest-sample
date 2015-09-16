@@ -4,7 +4,7 @@
 
 #import "SnippetsManagerConf.h"
 
-#define HOSTNAME_BETA @"www.onenote.com/api/beta/";
+#define HOSTNAME_BETA @"graph.microsoft.com/beta";
 #define PROTOCOL @"https";
 
 @implementation SnippetsManagerConf

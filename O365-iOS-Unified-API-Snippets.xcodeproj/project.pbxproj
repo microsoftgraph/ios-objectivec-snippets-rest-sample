@@ -24,7 +24,6 @@
 		9642FCC71BA2D6BF00BCC6F0 /* patchGroupData.json in Resources */ = {isa = PBXBuildFile; fileRef = 9642FCC61BA2D6BF00BCC6F0 /* patchGroupData.json */; };
 		965A310E1BA0EEE400644CFA /* eventDataPatch.json in Resources */ = {isa = PBXBuildFile; fileRef = 965A310D1BA0EEE400644CFA /* eventDataPatch.json */; };
 		965A31101BA0F2ED00644CFA /* emailData.json in Resources */ = {isa = PBXBuildFile; fileRef = 965A310F1BA0F2ED00644CFA /* emailData.json */; };
-		965A31121BA17C8800644CFA /* emailDraftData.json in Resources */ = {isa = PBXBuildFile; fileRef = 965A31111BA17C8800644CFA /* emailDraftData.json */; };
 		9663321C1B3CA12C007A9E5E /* Operation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9663321B1B3CA12C007A9E5E /* Operation.m */; };
 		969D393B1B5709C700604B95 /* o365.png in Resources */ = {isa = PBXBuildFile; fileRef = 969D39281B5709C700604B95 /* o365.png */; };
 		96A4C7E31B55CC2E007AC7F2 /* AFHTTPResponseSerializerHTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A4C7E21B55CC2E007AC7F2 /* AFHTTPResponseSerializerHTML.m */; };
@@ -64,7 +63,6 @@
 		9642FCC61BA2D6BF00BCC6F0 /* patchGroupData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = patchGroupData.json; sourceTree = "<group>"; };
 		965A310D1BA0EEE400644CFA /* eventDataPatch.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = eventDataPatch.json; sourceTree = "<group>"; };
 		965A310F1BA0F2ED00644CFA /* emailData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = emailData.json; sourceTree = "<group>"; };
-		965A31111BA17C8800644CFA /* emailDraftData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = emailDraftData.json; sourceTree = "<group>"; };
 		9663321A1B3CA12C007A9E5E /* Operation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Operation.h; sourceTree = "<group>"; };
 		9663321B1B3CA12C007A9E5E /* Operation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Operation.m; sourceTree = "<group>"; };
 		969D39281B5709C700604B95 /* o365.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = o365.png; path = Resources/o365.png; sourceTree = SOURCE_ROOT; };
@@ -182,7 +180,6 @@
 				D3EB832A1B87CBCD007509BD /* eventData.json */,
 				965A310D1BA0EEE400644CFA /* eventDataPatch.json */,
 				965A310F1BA0F2ED00644CFA /* emailData.json */,
-				965A31111BA17C8800644CFA /* emailDraftData.json */,
 				9642FCC01BA2CE9D00BCC6F0 /* newUserData.json */,
 				9642FCC21BA2D0D800BCC6F0 /* newGroupData.json */,
 				9642FCC61BA2D6BF00BCC6F0 /* patchGroupData.json */,
@@ -346,7 +343,6 @@
 				9642FCC31BA2D0D800BCC6F0 /* newGroupData.json in Resources */,
 				960C1FCC1B3B639700918D53 /* Podfile in Resources */,
 				9642FCC71BA2D6BF00BCC6F0 /* patchGroupData.json in Resources */,
-				965A31121BA17C8800644CFA /* emailDraftData.json in Resources */,
 				969D393B1B5709C700604B95 /* o365.png in Resources */,
 				963E9EFB1B38C50400D57EAA /* Images.xcassets in Resources */,
 				965A310E1BA0EEE400644CFA /* eventDataPatch.json in Resources */,
