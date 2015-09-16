@@ -62,7 +62,7 @@ Questions about Office 365 development in general should be posted to [Stack Ove
 
 ## Additional resources
 
-* [Office 365 Connect Sample for iOS Using Unified API (Preview)](O365-iOS-Unified-API-Connect)
+* [Office 365 Connect Sample for iOS Using Unified API](https://github.com/OfficeDev/O365-iOS-Unified-API-Connect)
 * [Office 365 unified API overview (preview)](https://msdn.microsoft.com/en-us/office/office365/howto/office-365-unified-api-overview)
 * [Microsoft Azure Active Directory Authentication Library (ADAL) for iOS and OSX](https://github.com/AzureAD/azure-activedirectory-library-for-objc)
 
