@@ -12,16 +12,14 @@
 
 @implementation ParamsPostDataViewController
 
-- (void)viewDidLoad{
+- (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"=> %@", self.payload);
-    
     self.textView.text = self.payload;
     self.textView.delegate = self;
 }
 
 #pragma mark - uitextfield delegate
-- (void)textViewDidEndEditing:(UITextView *)textView{
+- (void) textViewDidEndEditing:(UITextView *)textView {
     [self.paramsDelegate onSelectedValue:textView.text
                           withParamsType:ParamsSourcePostData];
     

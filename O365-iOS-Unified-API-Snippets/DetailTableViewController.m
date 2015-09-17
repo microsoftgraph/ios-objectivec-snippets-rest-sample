@@ -56,7 +56,7 @@ NSString* const kUrlCellId = @"urlCellId";
 
 #pragma mark - Table view data source
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if(section == 0)
         return @"Operation Description";
     
@@ -187,7 +187,9 @@ NSString* const kUrlCellId = @"urlCellId";
         cell.textView.text = @"";
         cell.textView.text = self.responseHeader;
         cell.textView.dataDetectorTypes = UIDataDetectorTypeLink;
-        cell.heightConstraint.constant = ceilf([[cell textView] sizeThatFits:CGSizeMake(self.tableView.frame.size.width - 20, FLT_MAX)].height);
+        
+        // restrict height to be less than 500 for performance as some response bodies are long
+        cell.heightConstraint.constant = MIN(500, ceilf([[cell textView] sizeThatFits:CGSizeMake(self.tableView.frame.size.width - 20, FLT_MAX)].height));
         
         [cell layoutIfNeeded];
         [cell updateConstraints];
@@ -215,7 +217,7 @@ NSString* const kUrlCellId = @"urlCellId";
 
 
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 
     if(indexPath.section == 1){
             [self performSegueWithIdentifier:@"showTextEdit" sender:nil];
@@ -291,7 +293,7 @@ NSString* const kUrlCellId = @"urlCellId";
 
 #pragma mark - Run
 
-- (BOOL) paramsTest{
+- (BOOL) paramsTest {
     // check operation loaded
     if(!self.operation){
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error"
@@ -357,7 +359,7 @@ NSString* const kUrlCellId = @"urlCellId";
     // GET
     if(self.operation.operationType == OperationGet){
 
-        [NetworkManager get:self.operation.operationURLString
+        [NetworkManager getOperation:self.operation.operationURLString
                 queryParams:self.operation.params
                     success:^(id responseHeader, id responseObject) {
                         self.responseHeader = [NSString stringWithFormat:@"%@", responseHeader];
@@ -378,7 +380,7 @@ NSString* const kUrlCellId = @"urlCellId";
     //Custom POST
     else if(self.operation.operationType == OperationPostCustom) {
         
-        [NetworkManager post:self.operation.operationURLString
+        [NetworkManager postOperation:self.operation.operationURLString
                 customHeader:self.operation.customHeader
                   customBody:self.operation.customBody
                      success:^(id responseHeader, id responseObject) {
@@ -400,7 +402,7 @@ NSString* const kUrlCellId = @"urlCellId";
     
     // POST
     else if(self.operation.operationType == OperationPost){
-        [NetworkManager post:self.operation.operationURLString
+        [NetworkManager postOperation:self.operation.operationURLString
                  queryParams:self.operation.params
                      success:^(id responseHeader, id responseObject) {
                          self.responseHeader = [NSString stringWithFormat:@"%@", responseHeader];
@@ -503,7 +505,7 @@ NSString* const kUrlCellId = @"urlCellId";
 
 #pragma mark - Params Delegate
 
-- (void)onSelectedValue:(NSString *)value withParamsType:(ParamsSourceType)sourceType{
+- (void)onSelectedValue:(NSString *)value withParamsType:(ParamsSourceType)sourceType {
     
     if(sourceType == ParamsSourceGetEvents){
         // change the url

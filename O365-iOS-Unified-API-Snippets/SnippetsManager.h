@@ -15,8 +15,9 @@
 @property (nonatomic, strong) NSMutableArray *operationsArray;
 
 // Public operations
-- (Operation*) getUserEvents;
-- (Operation*) getGroupsInTenant;
+- (Operation *) getUserEvents;
+- (Operation *) getGroupsInTenant;
+
 @end
 
 

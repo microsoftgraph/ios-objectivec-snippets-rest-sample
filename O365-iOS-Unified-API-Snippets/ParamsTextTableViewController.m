@@ -11,7 +11,7 @@
 
 @implementation ParamsTextTableViewController
 
-- (void)viewDidLoad {
+- (void) viewDidLoad {
     [super viewDidLoad];
 
     self.title = self.selectedKey;
@@ -29,18 +29,17 @@
     
 }
 
-- (void)didReceiveMemoryWarning {
+- (void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField{
+- (void) textFieldDidEndEditing:(UITextField *)textField {
 
     if([self.selectedKey isEqualToString:@"API URL"])
         self.operation.operationURLString = self.textField.text;
     
     else{
-   
         NSMutableDictionary *newParams = [NSMutableDictionary dictionaryWithDictionary:self.operation.params];
         [newParams setObject:self.textField.text forKey:self.selectedKey];
         self.operation.params = newParams;

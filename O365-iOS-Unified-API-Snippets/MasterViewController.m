@@ -37,7 +37,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)signOut:(id)sender{
+- (void)signOut:(id)sender {
     [[AuthenticationManager sharedInstance] clearCredentials];
     [self dismissViewControllerAnimated:YES completion:^{
         ;
@@ -61,7 +61,7 @@
 }
 
 #pragma mark - Table View
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     return self.snippetManager.sections[section];
 }
 
@@ -70,7 +70,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return ((NSArray*)self.snippetManager.operationsArray[section]).count;
+    return ((NSArray *)self.snippetManager.operationsArray[section]).count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -87,7 +87,7 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self performSegueWithIdentifier:@"showDetail" sender:nil];
 }
 

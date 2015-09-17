@@ -18,7 +18,7 @@
 @implementation NetworkManager
 
 // These keys will be removed from the request parameters
-+ (NSArray*) keysToRemove{
++ (NSArray *) keysToRemove {
     static NSArray *_keysToRemove;
     if(_keysToRemove == nil)
         _keysToRemove = @[ParamsEventIDKey, ParamsGroupIDKey];
@@ -26,38 +26,39 @@
 }
 
 // Helper to remove certains keys from the NSDictionary
-+ (NSDictionary*) paramsRemove:(NSArray*)keys from:(NSDictionary*)params{
++ (NSDictionary *) paramsRemove:(NSArray *)keys from:(NSDictionary *)params {
     NSMutableDictionary *newParams = [NSMutableDictionary dictionaryWithDictionary:params];
     [newParams removeObjectsForKeys:keys];
     return newParams;
 }
 
-+ (void)get:(NSString*)path
-queryParams:(NSDictionary*)queryParams
-    success:(void (^)(id responseHeader, id responseObject))success
-    failure:(void (^)(id responseObject))failure{
++ (void)getOperation:(NSString *)path
+         queryParams:(NSDictionary *)queryParams
+             success:(void (^)(id responseHeader, id responseObject))success
+             failure:(void (^)(id responseObject))failure {
     
-    [self get:path queryParams:queryParams
-customResponseType:nil
-      success:^(id responseHeader, id responseObject) {
-          success(responseHeader, responseObject);
-      } failure:^(id responseObject) {
-          failure(responseObject);
-      }];
+    [self getOperation:path
+           queryParams:queryParams
+    customResponseType:nil
+               success:^(id responseHeader, id responseObject) {
+                   success(responseHeader, responseObject);
+               } failure:^(id responseObject) {
+                   failure(responseObject);
+               }];
 }
 
-+ (void)get:(NSString*)path
-queryParams:(NSDictionary*)queryParams
-customResponseType:(NSString*)responseType
-    success:(void (^)(id responseHeader, id responseObject))success
-    failure:(void (^)(id responseObject))failure{
-
-    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
++ (void) getOperation:(NSString *)path
+          queryParams:(NSDictionary *)queryParams
+   customResponseType:(NSString *)responseType
+              success:(void (^)(id responseHeader, id responseObject))success
+              failure:(void (^)(id responseObject))failure {
+    
+    [[AuthenticationManager sharedInstance] checkAndRefreshTokenWithCompletion:^(ADAuthenticationError *error) {
         if(error){
             failure(error);
             return;
         }
-
+        
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         
         [manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
@@ -89,13 +90,13 @@ customResponseType:(NSString*)responseType
 }
 
 
-+ (void)post:(NSString*)path
- queryParams:(NSDictionary*)queryParams
-     success:(void (^)(id responseHeader, id responseObject))success
-     failure:(void (^)(id responseObject))failure{
++ (void)postOperation:(NSString *)path
+          queryParams:(NSDictionary *)queryParams
+              success:(void (^)(id responseHeader, id responseObject))success
+              failure:(void (^)(id responseObject))failure {
     
     NSLog(@"%@", path);
-    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
+    [[AuthenticationManager sharedInstance] checkAndRefreshTokenWithCompletion:^(ADAuthenticationError *error) {
         if(error){
             failure(error);
             return;
@@ -127,10 +128,11 @@ customResponseType:(NSString*)responseType
     }];
 }
 
-+ (void)deleteOperation:(NSString*)path queryParams:(NSDictionary*)queryParams
-                success:(void (^)(id responseHeader, id responseObject))success
-                failure:(void (^)(id responseObject))failure{
-    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
++ (void) deleteOperation:(NSString *)path
+             queryParams:(NSDictionary *)queryParams
+                 success:(void (^)(id responseHeader, id responseObject))success
+                 failure:(void (^)(id responseObject))failure {
+    [[AuthenticationManager sharedInstance] checkAndRefreshTokenWithCompletion:^(ADAuthenticationError *error) {
         if(error){
             failure(error);
             return;
@@ -160,10 +162,11 @@ customResponseType:(NSString*)responseType
     }];
 }
 
-+ (void)patchOperation:(NSString*)path queryParams:(NSDictionary*)queryParams
-               success:(void (^)(id responseHeader, id responseObject))success
-               failure:(void (^)(id responseObject))failure{
-    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
++ (void) patchOperation:(NSString *)path
+            queryParams:(NSDictionary *)queryParams
+                success:(void (^)(id responseHeader, id responseObject))success
+                failure:(void (^)(id responseObject))failure {
+    [[AuthenticationManager sharedInstance] checkAndRefreshTokenWithCompletion:^(ADAuthenticationError *error) {
         if(error){
             failure(error);
             return;
@@ -198,14 +201,12 @@ customResponseType:(NSString*)responseType
     
 }
 
-+ (void)patchOperation:(NSString*)path
-          customHeader:(NSDictionary*)customHeader
-            customBody:(NSString*)bodyString
-               success:(void (^)(id responseHeader, id responseObject))success
-               failure:(void (^)(id responseObject))failure{
-         NSLog(@"%@", path);
-    
-    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
++ (void) patchOperation:(NSString *)path
+        customHeader:(NSDictionary *)customHeader
+             customBody:(NSString *)bodyString
+                success:(void (^)(id responseHeader, id responseObject))success
+                failure:(void (^)(id responseObject))failure {
+    [[AuthenticationManager sharedInstance] checkAndRefreshTokenWithCompletion:^(ADAuthenticationError *error) {
         if(error){
             failure(error);
             return;
@@ -255,15 +256,13 @@ customResponseType:(NSString*)responseType
     }];
 }
 
-+ (void)post:(NSString*)path
-customHeader:(NSDictionary*)customHeader
-  customBody:(NSString*)bodyString
-     success:(void (^)(id responseHeader, id responseObject))success
-     failure:(void (^)(id responseObject))failure{
++ (void)postOperation:(NSString *)path
+         customHeader:(NSDictionar *)customHeader
+           customBody:(NSString *)bodyString
+              success:(void (^)(id responseHeader, id responseObject))success
+              failure:(void (^)(id responseObject))failure {
     
-        NSLog(@"%@", path);
-    
-    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
+    [[AuthenticationManager sharedInstance] checkAndRefreshTokenWithCompletion:^(ADAuthenticationError *error) {
         if(error){
             failure(error);
             return;
@@ -312,12 +311,12 @@ customHeader:(NSDictionary*)customHeader
     }];
 }
 
-+ (void)postWithMultipartForm:(NSString*)path
-                  queryParams:(NSDictionary*)queryParams
-             multiformObjects:(NSArray*)multiformObjects
-                      success:(void (^)(id responseHeader, id responseObject))success
-                      failure:(void (^)(id responseObject))failure{
-    [[AuthenticationManager sharedInstance] checkAndRefreshToken:^(ADAuthenticationError *error) {
++ (void) postWithMultipartForm:(NSString *)path
+                   queryParams:(NSDictionary *)queryParams
+              multiformObjects:(NSArray *)multiformObjects
+                       success:(void (^)(id responseHeader, id responseObject))success
+                       failure:(void (^)(id responseObject))failure {
+    [[AuthenticationManager sharedInstance] checkAndRefreshTokenWithCompletion:^(ADAuthenticationError *error) {
         if(error){
             failure(error);
             return;

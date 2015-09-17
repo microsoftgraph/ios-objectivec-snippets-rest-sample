@@ -9,11 +9,11 @@
 
 @implementation SnippetsManagerConf
 
-+ (NSString *)hostName_beta{
++ (NSString *)hostName_beta {
     return HOSTNAME_BETA;
 }
 
-+ (NSString *)protocol{
++ (NSString *)protocol {
     return PROTOCOL;
 }
 

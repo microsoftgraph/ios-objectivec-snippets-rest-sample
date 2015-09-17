@@ -8,58 +8,58 @@
 @interface NetworkManager : NSObject
 
 // GET
-+ (void)get:(NSString*)path
-queryParams:(NSDictionary*)queryParams
-    success:(void (^)(id responseHeader, id responseObject))success
-    failure:(void (^)(id responseObject))failure;
++ (void)getOperation:(NSString *)path
+         queryParams:(NSDictionary *)queryParams
+             success:(void (^)(id responseHeader, id responseObject))success
+             failure:(void (^)(id responseObject))failure;
 
 // GET with custom response type
 // For example, acceptable response type @"text/html"
-+ (void)get:(NSString*)path
-    queryParams:(NSDictionary*)queryParams
-customResponseType:(NSString*)responseType
-    success:(void (^)(id responseHeader, id responseObject))success
-    failure:(void (^)(id responseObject))failure;
++ (void)getOperation:(NSString *)path
+         queryParams:(NSDictionary *)queryParams
+  customResponseType:(NSString *)responseType
+             success:(void (^)(id responseHeader, id responseObject))success
+             failure:(void (^)(id responseObject))failure;
 
 // POST using query params in a dictionary
 // This will create json payload in the request
-+ (void)post:(NSString*)path
- queryParams:(NSDictionary*)queryParams
-     success:(void (^)(id responseHeader, id responseObject))success
-     failure:(void (^)(id responseObject))failure;
++ (void)postOperation:(NSString *)path
+          queryParams:(NSDictionary *)queryParams
+              success:(void (^)(id responseHeader, id responseObject))success
+              failure:(void (^)(id responseObject))failure;
 
 // POST using custom header and body
-+ (void)post:(NSString*)path
-customHeader:(NSDictionary*)customHeader
-  customBody:(NSString*)bodyString
-     success:(void (^)(id responseHeader, id responseObject))success
-     failure:(void (^)(id responseObject))failure;
++ (void)postOperation:(NSString *)path
+         customHeader:(NSDictionary *)customHeader
+           customBody:(NSString *)bodyString
+              success:(void (^)(id responseHeader, id responseObject))success
+              failure:(void (^)(id responseObject))failure;
 
 // DELETE
-+ (void)deleteOperation:(NSString*)path queryParams:(NSDictionary*)queryParams
-     success:(void (^)(id responseHeader, id responseObject))success
-     failure:(void (^)(id responseObject))failure;
++ (void)deleteOperation:(NSString *)path queryParams:(NSDictionary *)queryParams
+                success:(void (^)(id responseHeader, id responseObject))success
+                failure:(void (^)(id responseObject))failure;
 
 
 // PATCH using query params in a dictionary
 // This will create json payload in the request
-+ (void)patchOperation:(NSString*)path
-           queryParams:(NSDictionary*)queryParams
++ (void)patchOperation:(NSString *)path
+           queryParams:(NSDictionary *)queryParams
                success:(void (^)(id responseHeader, id responseObject))success
                failure:(void (^)(id responseObject))failure;
 
 
 // PATCH using custom header and body
-+ (void)patchOperation:(NSString*)path
-          customHeader:(NSDictionary*)customHeader
-            customBody:(NSString*)bodyString
++ (void)patchOperation:(NSString *)path
+          customHeader:(NSDictionary *)customHeader
+            customBody:(NSString *)bodyString
                success:(void (^)(id responseHeader, id responseObject))success
                failure:(void (^)(id responseObject))failure;
 
 // POST multipart form
-+ (void)postWithMultipartForm:(NSString*)path
-                  queryParams:(NSDictionary*)queryParams
-             multiformObjects:(NSArray*)multiformObjects
++ (void)postWithMultipartForm:(NSString *)path
+                  queryParams:(NSDictionary *)queryParams
+             multiformObjects:(NSArray *)multiformObjects
                       success:(void (^)(id responseHeader, id responseObject))success
                       failure:(void (^)(id responseObject))failure;
 @end

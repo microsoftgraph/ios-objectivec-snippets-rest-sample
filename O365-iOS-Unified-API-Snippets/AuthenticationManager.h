@@ -16,10 +16,10 @@
 
 + (AuthenticationManager*)sharedInstance;
 
-- (void)initWithAuthority:(NSString*)authority
-                 clientId:(NSString*)clientId
-              redirectURI:(NSString*)redirectURI
-               resourceID: (NSString*)resourceID
+- (void)initWithAuthority:(NSString *)authority
+                 clientId:(NSString *)clientId
+              redirectURI:(NSString *)redirectURI
+               resourceID: (NSString *)resourceID
                completion:(void (^)(ADAuthenticationError *error))completion;
 
 @property (nonatomic, strong) NSString *accessToken;
@@ -32,17 +32,17 @@
 
 // Acquire token
 - (void)acquireAuthTokenWithResource:(NSString *)resourceID
-                            clientID:(NSString*)clientID
+                            clientID:(NSString *)clientID
                          redirectURI:(NSURL*)redirectURI
-                          Completion:(void (^)(ADAuthenticationError *error))completion;
+                          completion:(void (^)(ADAuthenticationError *error))completion;
 
--(void) acquireAuthTokenCompletion:(void (^)(ADAuthenticationError *error))completion;
+- (void) acquireAuthTokenCompletion:(void (^)(ADAuthenticationError *error))completion;
 
 // Clears the ADAL token cache and the cookie cache.
 - (void) clearCredentials;
 
 // Check and refresh tokens if needed
-- (void)checkAndRefreshToken:(void (^)(ADAuthenticationError *error))completion;
+- (void) checkAndRefreshTokenWithCompletion:(void (^)(ADAuthenticationError *error))completion;
 
 @end
 

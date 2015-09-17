@@ -48,30 +48,30 @@ extern NSString* const ParamsPostDataKey;
 
 @property (nonatomic, assign) BOOL isAdminRequired;
 
-- (instancetype) initWithOperationName:(NSString*)operationName
-                             urlString:(NSString*)urlString
+- (instancetype) initWithOperationName:(NSString *)operationName
+                             urlString:(NSString *)urlString
                          operationType:(OperationType)operationType
-                           description:(NSString*)description
-                     documentationLink:(NSString*)documentationLink
-                                params:(NSDictionary*)params
-                          paramsSource:(NSDictionary*)paramsSource;
+                           description:(NSString *)description
+                     documentationLink:(NSString *)documentationLink
+                                params:(NSDictionary *)params
+                          paramsSource:(NSDictionary *)paramsSource;
 
-- (instancetype) initWithOperationName:(NSString*)operationName
-                             urlString:(NSString*)urlString
+- (instancetype) initWithOperationName:(NSString *)operationName
+                             urlString:(NSString *)urlString
                          operationType:(OperationType)operationType
-                          customHeader:(NSDictionary*)customHeader
-                            customBody:(NSString*)customBody
-                           description:(NSString*)description
-                     documentationLink:(NSString*)documentationLink
-                                params:(NSDictionary*)params
-                          paramsSource:(NSDictionary*)paramsSource;
+                          customHeader:(NSDictionary *)customHeader
+                            customBody:(NSString *)customBody
+                           description:(NSString *)description
+                     documentationLink:(NSString *)documentationLink
+                                params:(NSDictionary *)params
+                          paramsSource:(NSDictionary *)paramsSource;
 
-- (instancetype) initWithOperationName:(NSString*)operationName
-                             urlString:(NSString*)urlString
+- (instancetype) initWithOperationName:(NSString *)operationName
+                             urlString:(NSString *)urlString
                          operationType:(OperationType)operationType
-                           description:(NSString*)description
-                     documentationLink:(NSString*)documentationLink
-                      multiPartObjects:(NSArray*)multiPartObjects;
+                           description:(NSString *)description
+                     documentationLink:(NSString *)documentationLink
+                      multiPartObjects:(NSArray *)multiPartObjects;
 
 @end
 

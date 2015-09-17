@@ -24,22 +24,22 @@ NSString * const kAuthority   = @"https://login.microsoftonline.com/common";
 
 @implementation ConnectViewController
 
-- (void)viewDidLoad {
+- (void) viewDidLoad {
     [super viewDidLoad];
 }
 
 
-- (void) viewDidAppear:(BOOL)animated{
+- (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
    
 }
 
-- (void)didReceiveMemoryWarning {
+- (void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)authenticateWithAzureTapped:(id)sender {
+- (IBAction) connectToOffice365:(id)sender {
     [self showLoadingUI:YES];
     AuthenticationManager *authManager = [AuthenticationManager sharedInstance];
     
@@ -60,9 +60,8 @@ NSString * const kAuthority   = @"https://login.microsoftonline.com/common";
                                     }
                                     else{
                                         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                                            [self showLoadingUI:NO];
                                             [self performSegueWithIdentifier:@"showSplitView" sender:nil];
-                                            
+                                            [self showLoadingUI:NO];
                                         }];
                                     }
                                 }];
@@ -71,35 +70,33 @@ NSString * const kAuthority   = @"https://login.microsoftonline.com/common";
 }
 
 #pragma mark - helper
-- (void)showLoadingUI:(BOOL)loading{
+- (void) showLoadingUI:(BOOL)loading {
     if(loading){
         [self.activityIndicator startAnimating];
+        [self.connectButton setTitle:@"Connecting..." forState:UIControlStateNormal];
         self.connectButton.enabled = NO;
     }
     else{
         [self.activityIndicator stopAnimating];
+        [self.connectButton setTitle:@"Connect to Office 365" forState:UIControlStateNormal];
         self.connectButton.enabled = YES;
     }
 }
 
-- (void)handleADAuthenticationError:(ADAuthenticationError *)error{
+- (void) handleADAuthenticationError:(ADAuthenticationError *)error {
     NSLog(@"Error\nProtocol Code %@\nDescription %@", error.protocolCode, error.description);
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error"
                                                                    message:@"Please see the log for more details"
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:@"Close"
-                                              style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                                                  ;
-                                              }]];
-    [self presentViewController:alert animated:YES completion:^{
-        ;
-    }];
+                                              style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     UISplitViewController *splitViewController = segue.destinationViewController;
@@ -107,7 +104,7 @@ NSString * const kAuthority   = @"https://login.microsoftonline.com/common";
 }
 
 
-- (BOOL)splitViewController:(UISplitViewController *)splitViewController collapseSecondaryViewController:(UIViewController *)secondaryViewController ontoPrimaryViewController:(UIViewController *)primaryViewController {
+- (BOOL) splitViewController:(UISplitViewController *)splitViewController collapseSecondaryViewController:(UIViewController *)secondaryViewController ontoPrimaryViewController:(UIViewController *)primaryViewController {
     if ([secondaryViewController isKindOfClass:[UINavigationController class]] && [[(UINavigationController *)secondaryViewController topViewController] isKindOfClass:[DetailTableViewController class]] && ([(DetailTableViewController *)[(UINavigationController *)secondaryViewController topViewController] operation] == nil)) {
         // Return YES to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
         return YES;

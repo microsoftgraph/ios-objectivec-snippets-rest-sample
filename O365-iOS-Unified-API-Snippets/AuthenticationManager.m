@@ -23,7 +23,7 @@ NSInteger const TokenExpirationBuffer = 300;
 @implementation AuthenticationManager
 
 // Use a single authentication manager for the application.
-+ (AuthenticationManager *)sharedInstance{
++ (AuthenticationManager *)sharedInstance {
     static AuthenticationManager *sharedInstance;
     static dispatch_once_t onceToken;
     
@@ -36,11 +36,11 @@ NSInteger const TokenExpirationBuffer = 300;
 }
 
 #pragma mark - init
-- (void)initWithAuthority:(NSString*)authority
-                 clientId:(NSString*)clientId
-              redirectURI:(NSString*)redirectURI
-               resourceID:(NSString*)resourceID
-               completion:(void (^)(ADAuthenticationError *error))completion{
+- (void)initWithAuthority:(NSString *)authority
+                 clientId:(NSString *)clientId
+              redirectURI:(NSString *)redirectURI
+               resourceID:(NSString *)resourceID
+               completion:(void (^)(ADAuthenticationError *error))completion {
     ADAuthenticationError *error;
     _context = [ADAuthenticationContext authenticationContextWithAuthority:authority error:&error];
     
@@ -59,18 +59,18 @@ NSInteger const TokenExpirationBuffer = 300;
 }
 
 #pragma mark - acquire token
-- (void)acquireAuthTokenCompletion:(void (^)(ADAuthenticationError *error))completion{
+- (void)acquireAuthTokenCompletion:(void (^)(ADAuthenticationError *error))completion {
     [self acquireAuthTokenWithResource:self.resourceID
                               clientID:self.clientID
                            redirectURI: [NSURL URLWithString:self.redirectUri]
-                            Completion:^(ADAuthenticationError *error) {
+                            completion:^(ADAuthenticationError *error) {
                                 completion(error);}];
 }
 
 - (void)acquireAuthTokenWithResource:(NSString *)resourceID
-                            clientID:(NSString*)clientID
+                            clientID:(NSString *)clientID
                          redirectURI:(NSURL*)redirectURI
-                          Completion:(void (^)(ADAuthenticationError *error))completion{
+                          completion:(void (^)(ADAuthenticationError *error))completion {
     [self.context acquireTokenWithResource:resourceID
                                   clientId:clientID
                                redirectUri:redirectURI
@@ -91,10 +91,10 @@ NSInteger const TokenExpirationBuffer = 300;
 }
 
 #pragma mark - Refresh token
-- (void)checkAndRefreshToken:(void (^)(ADAuthenticationError *error))completion{
+- (void) checkAndRefreshTokenWithCompletion:(void (^)(ADAuthenticationError *error))completion{
     if(self.refreshToken) {
-        NSDate *now = [NSDate dateWithTimeIntervalSinceNow:TokenExpirationBuffer];
-        NSComparisonResult result = [self.expiresDate compare:now];
+        NSDate *nowWithBuffer = [NSDate dateWithTimeIntervalSinceNow:TokenExpirationBuffer];
+        NSComparisonResult result = [self.expiresDate compare:nowWithBuffer];
         if (result == NSOrderedSame || result == NSOrderedAscending) {
             [self.context acquireTokenByRefreshToken:self.refreshToken
                                             clientId:self.clientID

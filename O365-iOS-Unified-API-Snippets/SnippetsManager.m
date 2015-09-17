@@ -81,7 +81,7 @@
 
 #pragma mark - Users
 //Returns all of the users in your tenant's directory.
-- (Operation*) getUsersInTenant{
+- (Operation *) getUsersInTenant {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get users in tenant"
                                                           urlString:[self createURLString:@"/myOrganization/users"]
                                                       operationType:OperationGet
@@ -94,7 +94,7 @@
 }
 
 //Returns all of the users in your tenant's directory.
-- (Operation*) getSelectUsersInTenant{
+- (Operation *) getSelectUsersInTenant {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get select users in a tenant"
                                                           urlString:[self createURLString:@"/myOrganization/users"]
                                                       operationType:OperationGet
@@ -106,7 +106,7 @@
 }
 
 // Create new user - newUserData.json
-- (Operation*) createNewUser{
+- (Operation *) createNewUser {
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"newUserData" ofType:@"json"];
     
     NSString *userId = [[NSProcessInfo processInfo] globallyUniqueString];
@@ -131,7 +131,7 @@
 
 
 //Returns the user's profile.
-- (Operation*) getUserProfile{
+- (Operation *) getUserProfile {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's profile"
                                                           urlString:[self createURLString:@"/me"]
                                                       operationType:OperationGet
@@ -146,7 +146,7 @@
 
 
 //Returns select information about the signed-in user from Azure Active Directory.
--(Operation*) getPropertiesUserProfile{
+-(Operation *) getPropertiesUserProfile {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get select properties of user's profile"
                                                           urlString:[self createURLString:@"/me"]
                                                       operationType:OperationGet
@@ -159,7 +159,7 @@
 
 
 //Gets the signed-in user's drive from OneDrive for Business.
-- (Operation*) getUserDrive{
+- (Operation *) getUserDrive {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's drive"
                                                           urlString:[self createURLString:@"/me/drive"]
                                                       operationType:OperationGet
@@ -172,7 +172,7 @@
 
 
 //Gets the signed-in user's events from Office 365.
-- (Operation*) getUserEvents{
+- (Operation *) getUserEvents {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's events"
                                                           urlString:[self createURLString:@"/me/events"]
                                                       operationType:OperationGet
@@ -185,7 +185,7 @@
 
 
 // Creates and adds an event to the signed-in user's calendar - eventData.json
-- (Operation*) addNewCalendarEvent{
+- (Operation *) addNewCalendarEvent {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
     
@@ -209,7 +209,7 @@
 }
 
 // Updates the event from user's calendar - eventDataPatch.json
-- (Operation*) updateCalendarEvent{
+- (Operation *) updateCalendarEvent {
     
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"eventDataPatch" ofType:@"json"];
     NSMutableString *payload = [NSMutableString stringWithString:[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]];
@@ -232,7 +232,7 @@
 
 
 // Deletes an event from user's calendar
--(Operation*) deleteCalendarEvent{
+-(Operation *) deleteCalendarEvent {
     Operation *operation = [[Operation alloc] initWithOperationName:@"DELETE: Delete an event"
                                                           urlString:[self createURLString:[NSString stringWithFormat:@"/me/events/{%@}", ParamsEventIDKey]]
                                                       operationType:OperationDelete
@@ -245,7 +245,7 @@
 
 
 //Gets the signed-in user's messages from Office 365.
-- (Operation*) getUserMessages{
+- (Operation *) getUserMessages {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's messages"
                                                           urlString:[self createURLString:@"/me/messages"]
                                                       operationType:OperationGet
@@ -257,7 +257,7 @@
 }
 
 // Create and send a message as the signed-in user - emailData.json
-- (Operation*) createAndSendMessage{
+- (Operation *) createAndSendMessage {
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"emailData" ofType:@"json"];
     
     // replace email address to self
@@ -279,7 +279,7 @@
 }
 
 //Gets the signed-in user's contacts.
-- (Operation*) getUserContacts{
+- (Operation *) getUserContacts {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's contacts"
                                                           urlString:[self createURLString:@"/me/contacts"]
                                                       operationType:OperationGet
@@ -292,7 +292,7 @@
 
 
 //GET: Get user's manager
-- (Operation*) getUserManager{
+- (Operation *) getUserManager {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's manager"
                                                           urlString:[self createURLString:@"/me/manager"]
                                                       operationType:OperationGet
@@ -304,7 +304,7 @@
 }
 
 //Gets the signed-in user's direct reports.
-- (Operation*) getUserReports{
+- (Operation *) getUserReports {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's direct reports"
                                                           urlString:[self createURLString:@"/me/directReports"]
                                                       operationType:OperationGet
@@ -316,7 +316,7 @@
 }
 
 //Gets the signed-in user's photo.
-- (Operation*) getUserPhoto{
+- (Operation *) getUserPhoto{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's photo"
                                                           urlString:[self createURLString:@"/me/userPhoto"]
                                                       operationType:OperationGet
@@ -328,7 +328,7 @@
 }
 
 //Gets a collection of groups that the signed-in user is a member of.
-- (Operation*) getUserGroupMembership{
+- (Operation *) getUserGroupMembership {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user group membership"
                                                           urlString:[self createURLString:@"/me/memberOf"]
                                                       operationType:OperationGet
@@ -342,7 +342,7 @@
 #pragma mark - Groups Snippets
 
 //Returns all of the groups in your tenant's directory.
-- (Operation*) getGroupsInTenant{
+- (Operation *) getGroupsInTenant {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get groups in tenant"
                                                           urlString:[self createURLString:@"/myOrganization/groups"]
                                                       operationType:OperationGet
@@ -354,7 +354,7 @@
 }
 
 // Add new security group
-- (Operation*) addNewSecurityGroup{
+- (Operation *) addNewSecurityGroup {
     
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"newGroupData" ofType:@"json"];
     NSString *payload = [[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil] stringByReplacingOccurrencesOfString:@"<GROUP>" withString:[[NSProcessInfo processInfo] globallyUniqueString]];
@@ -372,7 +372,7 @@
 }
 
 // Gets information about a specific group in the tenant by ID.
-- (Operation*) getSpecificGroup{
+- (Operation *) getSpecificGroup {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get specific group by ID"
                                                           urlString:[self createURLString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}", ParamsGroupIDKey]]
                                                       operationType:OperationGet
@@ -384,7 +384,7 @@
 }
 
 // Updates the description of the group - patchGroupData.json
-- (Operation*) updateGroup{
+- (Operation *) updateGroup {
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"patchGroupData" ofType:@"json"];
     NSMutableString *payload = [NSMutableString stringWithString:[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]];
     
@@ -404,7 +404,7 @@
 }
 
 // Deletes a group
-- (Operation*) deleteGroup{
+- (Operation *) deleteGroup {
     Operation *operation = [[Operation alloc] initWithOperationName:@"DELETE: Delete a group"
                                                           urlString:[self createURLString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}", ParamsGroupIDKey]]
                                                       operationType:OperationDelete
@@ -416,7 +416,7 @@
 }
 
 // Gets a specific group's members
-- (Operation*) getGroupMembers{
+- (Operation *) getGroupMembers {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get specific group members"
                                                           urlString:[self createURLString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}/members", ParamsGroupIDKey]]
                                                       operationType:OperationGet
@@ -428,7 +428,7 @@
 }
 
 // Gets a specific group's owners
-- (Operation*) getGroupOwners{
+- (Operation *) getGroupOwners {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get specific group owners"
                                                           urlString:[self createURLString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}/owners", ParamsGroupIDKey]]
                                                       operationType:OperationGet
@@ -442,7 +442,7 @@
 #pragma mark - Contacts Snippets
 
 //Returns all of the contacts in your tenant's directory.
-- (Operation*) getContactsInTenant{
+- (Operation *) getContactsInTenant {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get contacts in tenant"
                                                           urlString:[self createURLString:@"/myOrganization/contacts"]
                                                       operationType:OperationGet
@@ -454,7 +454,7 @@
 }
 
 #pragma mark - helper
-- (NSString*) createURLString:(NSString*)path{
+- (NSString *) createURLString:(NSString *)path {
     NSMutableString *urlString = [NSMutableString new];
     [urlString appendString:[SnippetsManagerConf protocol]];
     [urlString appendString:@"://"];

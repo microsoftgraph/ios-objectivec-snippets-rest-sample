@@ -10,13 +10,13 @@ NSString* const ParamsEventIDKey = @"eventID";
 NSString* const ParamsPostDataKey = @"Post data";
 NSString* const ParamsGroupIDKey = @"groupID";
 
-- (instancetype) initWithOperationName:(NSString*)operationName
-                             urlString:(NSString*)urlString
+- (instancetype) initWithOperationName:(NSString *)operationName
+                             urlString:(NSString *)urlString
                          operationType:(OperationType)operationType
-                           description:(NSString*)description
-                     documentationLink:(NSString*)documentationLink
-                                params:(NSDictionary*)params
-                          paramsSource:(NSDictionary*)paramsSource{
+                           description:(NSString *)description
+                     documentationLink:(NSString *)documentationLink
+                                params:(NSDictionary *)params
+                          paramsSource:(NSDictionary *)paramsSource {
     self = [super init];
     if(self){
         _operationName = operationName;
@@ -32,15 +32,15 @@ NSString* const ParamsGroupIDKey = @"groupID";
     return self;
 }
 
-- (instancetype) initWithOperationName:(NSString*)operationName
-                             urlString:(NSString*)urlString
+- (instancetype) initWithOperationName:(NSString *)operationName
+                             urlString:(NSString *)urlString
                          operationType:(OperationType)operationType
-                          customHeader:(NSDictionary*)customHeader
-                            customBody:(NSString*)customBody
-                           description:(NSString*)description
-                     documentationLink:(NSString*)documentationLink
-                                params:(NSDictionary*)params
-                          paramsSource:(NSDictionary*)paramsSource{
+                          customHeader:(NSDictionary *)customHeader
+                            customBody:(NSString *)customBody
+                           description:(NSString *)description
+                     documentationLink:(NSString *)documentationLink
+                                params:(NSDictionary *)params
+                          paramsSource:(NSDictionary *)paramsSource {
     self = [super init];
     if(self){
         _operationName = operationName;
@@ -58,12 +58,12 @@ NSString* const ParamsGroupIDKey = @"groupID";
     return self;
 }
 
-- (instancetype) initWithOperationName:(NSString*)operationName
-                             urlString:(NSString*)urlString
+- (instancetype) initWithOperationName:(NSString *)operationName
+                             urlString:(NSString *)urlString
                          operationType:(OperationType)operationType
-                           description:(NSString*)description
-                     documentationLink:(NSString*)documentationLink
-                      multiPartObjects:(NSArray*)multiPartObjects{
+                           description:(NSString *)description
+                     documentationLink:(NSString *)documentationLink
+                      multiPartObjects:(NSArray *)multiPartObjects {
     self = [super init];
     if(self){
         _operationName = operationName;
@@ -78,7 +78,7 @@ NSString* const ParamsGroupIDKey = @"groupID";
     
     
 }
-- (id)copy{
+- (id)copy {
     Operation *obj = [[Operation alloc] initWithOperationName:self.operationName
                                                     urlString:self.operationURLString
                                                 operationType:self.operationType

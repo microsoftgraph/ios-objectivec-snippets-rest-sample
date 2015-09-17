@@ -39,10 +39,9 @@
 
 }
 
-- (void) loadEvents
-{
+- (void) loadEvents {
     Operation *getCalendarEvents = [[[SnippetsManager alloc] init] getUserEvents];
-    [NetworkManager get:getCalendarEvents.operationURLString
+    [NetworkManager getOperation:getCalendarEvents.operationURLString
             queryParams:getCalendarEvents.params
          customResponseType:nil
                 success:^(id responseHeader, id responseObject) {
@@ -75,10 +74,9 @@
 }
 
 
-- (void) loadGroups
-{
+- (void) loadGroups {
     Operation *getGroups = [[[SnippetsManager alloc] init] getGroupsInTenant];
-    [NetworkManager get:getGroups.operationURLString
+    [NetworkManager getOperation:getGroups.operationURLString
             queryParams:getGroups.params
      customResponseType:nil
                 success:^(id responseHeader, id responseObject) {
@@ -141,7 +139,7 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.paramsDelegate onSelectedValue:self.guidArray[indexPath.row] withParamsType:self.paramsSourceType];
     [self.navigationController popViewControllerAnimated:YES];
 }

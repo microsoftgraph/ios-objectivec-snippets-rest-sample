@@ -9,7 +9,7 @@
 
 @protocol ParamsHelperDelegate <NSObject>
 
-- (void) onSelectedValue:(NSString*)value
+- (void) onSelectedValue:(NSString *)value
           withParamsType:(ParamsSourceType)sourceType;
 
 @end

@@ -6,8 +6,8 @@
 
 @interface SnippetsManagerConf : NSObject
 
-+ (NSString*) hostName_beta;
-+ (NSString*) protocol;
++ (NSString *) hostName_beta ;
++ (NSString *) protocol ;
 
 @end
 
