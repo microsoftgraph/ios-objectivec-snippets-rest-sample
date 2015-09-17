@@ -27,7 +27,7 @@ The Office 365 unified API exposes multiple APIs from Microsoft cloud services t
 1. Clone this repository
 2. Use CocoaPods to import the necessary dependencies:
         
-	     pod 'AFNetworking', '2.5.4'
+	     pod 'AFNetworking', '2.6.0'
 	     pod 'ADALiOS', '1.2.4'
 
 	This sample app already contains a podfile that will get the necessary components(pods) into  the project. Simply navigate to the project from **Terminal** and run 
