@@ -158,12 +158,12 @@
 }
 
 
-//Gets the signed-in user's drive from SharePoint Online.
+//Gets the signed-in user's drive from OneDrive for Business.
 - (Operation*) getUserDrive{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's drive"
                                                           urlString:[self createURLString:@"/me/drive"]
                                                       operationType:OperationGet
-                                                        description:@"Gets the signed-in user's drive from SharePoint Online."
+                                                        description:@"Gets the signed-in user's drive from OneDrive for Business."
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Drive"
                                                              params:nil
                                                        paramsSource:nil];
@@ -171,12 +171,12 @@
 }
 
 
-//Gets the signed-in user's events from Exchange Online.
+//Gets the signed-in user's events from Office 365.
 - (Operation*) getUserEvents{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's events"
                                                           urlString:[self createURLString:@"/me/events"]
                                                       operationType:OperationGet
-                                                        description:@"Gets the signed-in user's events from Exchange Online."
+                                                        description:@"Gets the signed-in user's events from Office 365."
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Event"
                                                              params:@{@"$select":@"id, Subject"}
                                                        paramsSource:@{@"$select":@(ParamsSourceTextEdit)}];
