@@ -37,7 +37,7 @@ The Office 365 unified API exposes multiple APIs from Microsoft cloud services t
    	For more information, see **Using CocoaPods** in [Additional Resources](#AdditionalResources)
   
 3. Open **O365-iOS-Unified-API-Snippets.xcworkspace**
-4. Open **ConnectViewController.m** under the **Controllers** folder in the project. Ensure you have registered your app in Microsoft Azure, configured the proper permissions as specified, and obtained the **ClientID** and **RedirectUri** values from the registration. Again, this procedure is detailed under the fifth bullet point in the prerequisites section: **A client id and redirect uri values of an application registered in Azure** You'll see that the **ClientID** and **RedirectUri** values can be added to the top of the file. Supply the necessary values here:
+4. Open **ConnectViewController.m** under the **Controllers** folder in the project. Ensure you have registered your app in Microsoft Azure, configured the proper permissions as specified, and obtained the **ClientID** and **RedirectUri** values from the registration. Again, this procedure is detailed under the fifth bullet point in the prerequisites section: **A client id and redirect uri values of an application registered in Azure.** You'll see that the **ClientID** and **RedirectUri** values can be added to the top of the file. Supply the necessary values here:
 
         // You will set your application's clientId and redirect URI. You get
         // these when you register your application in Microsoft Azure.
