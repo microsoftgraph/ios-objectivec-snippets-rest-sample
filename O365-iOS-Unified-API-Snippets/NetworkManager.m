@@ -257,7 +257,7 @@
 }
 
 + (void)postOperation:(NSString *)path
-         customHeader:(NSDictionar *)customHeader
+         customHeader:(NSDictionary *)customHeader
            customBody:(NSString *)bodyString
               success:(void (^)(id responseHeader, id responseObject))success
               failure:(void (^)(id responseObject))failure {
