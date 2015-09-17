@@ -187,9 +187,10 @@ NSString* const kUrlCellId = @"urlCellId";
         cell.textView.text = @"";
         cell.textView.text = self.responseHeader;
         cell.textView.dataDetectorTypes = UIDataDetectorTypeLink;
+        cell.textView.scrollEnabled = YES;
         
         // restrict height to be less than 500 for performance as some response bodies are long
-        cell.heightConstraint.constant = MIN(500, ceilf([[cell textView] sizeThatFits:CGSizeMake(self.tableView.frame.size.width - 20, FLT_MAX)].height));
+        cell.heightConstraint.constant = MIN(500, [[cell textView] sizeThatFits:CGSizeMake(self.tableView.frame.size.width - 20, FLT_MAX)].height);
         
         [cell layoutIfNeeded];
         [cell updateConstraints];
@@ -201,11 +202,13 @@ NSString* const kUrlCellId = @"urlCellId";
         ResizableTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kResizableTextCellId];
         
         // resizing of the row height
-        cell.textView.editable = NO;
         cell.textView.text = @"";
         cell.textView.text = self.responseBody;
         cell.textView.dataDetectorTypes = UIDataDetectorTypeLink;
-        cell.heightConstraint.constant = ceilf([[cell textView] sizeThatFits:CGSizeMake(self.tableView.frame.size.width - 20, FLT_MAX)].height);
+        cell.textView.scrollEnabled = YES;
+        
+        // restrict height to be less than 500 for performance as some response bodies are long
+        cell.heightConstraint.constant = MIN(500, ceilf([[cell textView] sizeThatFits:CGSizeMake(self.tableView.frame.size.width - 20, FLT_MAX)].height));
         
         [cell layoutIfNeeded];
         [cell updateConstraints];

@@ -112,7 +112,7 @@
                                             <rect key="frame" x="15" y="23" width="41" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                            <color key="textColor" red="1" green="0.1176470588" blue="0.1137254902" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.11357802726976136" green="0.65151515151515149" blue="0.28227338650215922" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -396,7 +396,7 @@
         <image name="o365.png" width="597" height="860"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Tll-UG-LXB"/>
+        <segue reference="ZX1-0n-JGt"/>
         <segue reference="pTZ-f9-qHO"/>
     </inferredMetricsTieBreakers>
 </document>

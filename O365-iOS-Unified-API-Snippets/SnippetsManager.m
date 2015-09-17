@@ -48,7 +48,6 @@
         [usersArray addObject:[self getUserMessages]];
         [usersArray addObject:[self createAndSendMessage]];
         
-        [usersArray addObject:[self getUserContacts]];
         [usersArray addObject:[self getUserManager]];
         [usersArray addObject:[self getUserReports]];
         [usersArray addObject:[self getUserPhoto]];
@@ -277,19 +276,6 @@
     
     return operation;
 }
-
-//Gets the signed-in user's contacts.
-- (Operation *) getUserContacts {
-    Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's contacts"
-                                                          urlString:[self createURLString:@"/me/contacts"]
-                                                      operationType:OperationGet
-                                                        description:@"Gets the signed-in user's contacts."
-                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Contact"
-                                                             params:nil
-                                                       paramsSource:nil];
-    return operation;
-}
-
 
 //GET: Get user's manager
 - (Operation *) getUserManager {
