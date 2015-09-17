@@ -216,7 +216,7 @@
     
     //NSString *payload = @"{Subject: 'Weekly Sync', Location: { DisplayName: 'Water cooler'";
     Operation *operation = [[Operation alloc] initWithOperationName:@"PATCH: Update an event"
-                                                          urlString:[self createURLString[NSString stringWithFormat:@"/me/events/{%@}", ParamsEventIDKey]]
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/me/events/{%@}", ParamsEventIDKey]]
                                                       operationType:OperationPatchCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
