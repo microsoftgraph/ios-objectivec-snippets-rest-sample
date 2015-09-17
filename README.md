@@ -37,7 +37,7 @@ This sample app already contains a podfile that will get the necessary component
    For more information, see **Using CocoaPods** in [Additional Resources](#AdditionalResources)
   
 3. Open **O365-iOS-Unified-API-Snippets.xcworkspace**
-4. Open **ConnectViewController.m** under the **Controllers** folder in the project. Ensure you have completed the third bullet point in the prerequisites section, including registering your app in Microsoft Azure, configuring the proper permissions as specified, and obtaining the **ClientID** and **RedirectUri** values from the registration. You'll see that the **ClientID** and **RedirectUri** values can be added to the top of the file. Supply the necessary values here:
+4. Open **ConnectViewController.m** under the **Controllers** folder in the project. Ensure you have completed the fifth bullet point in the prerequisites section, including registering your app in Microsoft Azure, configuring the proper permissions as specified, and obtaining the **ClientID** and **RedirectUri** values from the registration. You'll see that the **ClientID** and **RedirectUri** values can be added to the top of the file. Supply the necessary values here:
 
         // You will set your application's clientId and redirect URI. You get
         // these when you register your application in Microsoft Azure.
