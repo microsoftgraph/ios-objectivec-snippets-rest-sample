@@ -50,7 +50,7 @@ This sample app already contains a podfile that will get the necessary component
 
 5.Run the sample
 
-To learn more about the sample, visit our [understanding the code](https://github.com/OfficeDev/O365-iOS-Unified-API-Snippets/wiki) wiki page.
+To learn more about the sample, visit our [understanding the code](https://github.com/OfficeDev/O365-iOS-Unified-API-Snippets/wiki/Understanding-the-Snippets-sample-code) wiki page.
 
 
 ## Questions and comments
