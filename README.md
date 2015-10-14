@@ -1,4 +1,4 @@
-# Office 365 iOS Unified API-Snippets Preview
+# Office 365 iOS Unified API Snippets Preview
 
 
 
