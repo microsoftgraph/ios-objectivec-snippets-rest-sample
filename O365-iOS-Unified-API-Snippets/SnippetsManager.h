@@ -17,7 +17,7 @@
 // Public operations
 - (Operation *) getUserEvents;
 - (Operation *) getGroupsInTenant;
-
+- (Operation *) getUserFiles;
 @end
 
 

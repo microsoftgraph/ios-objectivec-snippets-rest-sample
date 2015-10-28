@@ -11,18 +11,21 @@ typedef enum{
     OperationDelete,
     OperationPostMultiPart,
     OperationPatch,
-    OperationPatchCustom
+    OperationPatchCustom,
+    OperationPut
 } OperationType;
 
 typedef enum{
     ParamsSourceTextEdit = 1,
     ParamsSourceGetEvents = 2,
     ParamsSourceGetGroups = 3,
-    ParamsSourcePostData = 4
+    ParamsSourcePostData = 4,
+    ParamsSourceGetFiles = 5
 } ParamsSourceType;
 
 extern NSString* const ParamsEventIDKey;
 extern NSString* const ParamsGroupIDKey;
+extern NSString* const ParamsFileIDKey;
 
 extern NSString* const ParamsPostDataKey;
 

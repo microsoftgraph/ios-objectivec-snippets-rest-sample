@@ -311,6 +311,63 @@
     }];
 }
 
+
++ (void)putOperation:(NSString *)path
+         customHeader:(NSDictionary *)customHeader
+           customBody:(NSString *)bodyString
+              success:(void (^)(id responseHeader, id responseObject))success
+              failure:(void (^)(id responseObject))failure {
+    
+    [[AuthenticationManager sharedInstance] checkAndRefreshTokenWithCompletion:^(ADAuthenticationError *error) {
+        if(error){
+            failure(error);
+            return;
+        }
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+        [request setURL:[NSURL URLWithString:path]];
+        [request setHTTPMethod:@"PUT"];
+        
+        [request addValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
+       forHTTPHeaderField:@"Authorization"];
+        
+        //set headers
+        NSArray *customHeaderArray = [customHeader allKeys];
+        for(NSString *key in customHeaderArray){
+            [request addValue:[customHeader objectForKey:key] forHTTPHeaderField:key];
+        }
+        //create the body
+        NSMutableData *postBody = [NSMutableData data];
+        [postBody appendData:[bodyString dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        //post
+        [request setHTTPBody:postBody];
+        
+        AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc]
+                                             initWithRequest:request];
+        operation.responseSerializer = [AFJSONResponseSerializer serializer];
+        
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSLog(@"status code = %ld", (long)operation.response.statusCode);
+            
+            success(operation.response.allHeaderFields, responseObject);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+            
+            if(![operation.responseString isEqual:[NSNull null]])
+                [userInfo setObject:operation.responseString forKey:@"responseString"];
+            
+            NSError *newError = [NSError errorWithDomain:error.domain
+                                                    code:error.code
+                                                userInfo:userInfo];
+            
+            
+            failure(newError);
+        }];
+        [operation start];
+    }];
+}
+
+
 + (void) postWithMultipartForm:(NSString *)path
                    queryParams:(NSDictionary *)queryParams
               multiformObjects:(NSArray *)multiformObjects
@@ -325,7 +382,6 @@
         
         [manager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", [[AuthenticationManager sharedInstance] accessToken]]
                          forHTTPHeaderField:@"Authorization"];
-        
         
         [manager POST:path parameters:[self paramsRemove:self.keysToRemove from:queryParams] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             

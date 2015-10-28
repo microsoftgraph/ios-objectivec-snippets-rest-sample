@@ -36,6 +36,9 @@
     
     else if(self.paramsSourceType == ParamsSourceGetGroups)
         [self loadGroups];
+    
+    else if(self.paramsSourceType == ParamsSourceGetFiles)
+        [self loadFiles];
 
 }
 
@@ -106,6 +109,46 @@
                     // fail
                     [self.activityIndicator stopAnimating];
                 }];
+    
+    
+}
+
+
+- (void) loadFiles {
+    Operation *getAllFiles = [[[SnippetsManager alloc] init] getUserFiles];
+    [NetworkManager getOperation:getAllFiles.operationURLString
+                     queryParams:getAllFiles.params
+              customResponseType:nil
+                         success:^(id responseHeader, id responseObject) {
+                             
+                             NSLog(@"Success %@",responseObject);
+                             // population
+                             [self.displayArray removeAllObjects];
+                             [self.guidArray removeAllObjects];
+                             
+                             NSArray *value = [responseObject objectForKey:@"value"];
+                             
+                             for(id event in value){
+                                 
+                                 if([event objectForKey:@"id"]){
+                                     [self.guidArray addObject:[event objectForKey:@"id"]];
+                                     if(![[event objectForKey:@"name"] isEqual:[NSNull null]])
+                                         [self.displayArray addObject:[event objectForKey:@"name"]];
+                                     else
+                                         [self.displayArray addObject:@""];
+                                     
+                                 }
+                                 
+                             }
+                             
+                             // reload tableview
+                             [self.activityIndicator stopAnimating];
+                             [self.tableView reloadData];
+                         } failure:^(id responseObject) {
+                             // fail
+                              NSLog(@"Fail %@",responseObject);
+                             [self.activityIndicator stopAnimating];
+                         }];
     
     
 }
