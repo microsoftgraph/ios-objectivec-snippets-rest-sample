@@ -55,10 +55,11 @@
         [usersArray addObject:[self getUserFiles]];
         [usersArray addObject:[self createNewFile]];
         [usersArray addObject:[self createNewFolder]];
-        [usersArray addObject:[self updateFile]];
+        [usersArray addObject:[self downloadFile]];
+        [usersArray addObject:[self updateFileContents]];
         [usersArray addObject:[self deleteFile]];
         [usersArray addObject:[self copyFile]];
-        [usersArray addObject:[self renameFile]];
+        [usersArray addObject:[self updateFileMetadata]];
         
         
         // Section 2 - Groups
@@ -94,7 +95,7 @@
                                                           urlString:[self createURLString:@"/me/drive/root/children"]
                                                       operationType:OperationGet
                                                         description:@"Returns all of the user's files"
-                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_User"
+                                                  documentationLink:@"https://dev.onedrive.com/drives/get.htm"
                                                              params:nil
                                                        paramsSource:nil];
 
@@ -103,43 +104,33 @@
 }
 
 // Creates a text file in the user's root directory.
-//POST: CreateFileAsync - "me/drive/root/children/" + fileName + "/content"
 - (Operation *) createNewFile {
-    
+    NSString *fileName = @"NewFile.txt";
     Operation *operation = [[Operation alloc] initWithOperationName:@"PUT: Create a text file"
-                                                          urlString:[self createURLString:@"/me/drive/root/children/file2/content"]
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/me/drive/root/children/%@/content", fileName]]
                                                       operationType:OperationPut
                                                        customHeader:@{@"content-type":@"text/plain"}
-                                                         customBody:@"Test"
-                                                        description:@"Creates a text file in the user's root directory."
-                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_action_user_sendMail"
+                                                         customBody:@"Test file"
+                                                        description:@"Creates a text file in the user's root directory. The file name NewFile.txt is editable in API URL. "
+                                                  documentationLink:@"https://dev.onedrive.com/items/create.htm"
                                                              params:nil
                                                        paramsSource:nil];
     
     return operation;
 }
 
-// Creates a folder in the user's root directory.
-//POST: CreateFolderAsync - "me/drive/root/children"
-//var folderMetadata = "{"+ "'name': '" + folderName + "',"
-//+ "'folder': {},"+ "'@name.conflictBehavior': 'rename'"
-//+ "}"
-//;
+// Creates a folder in the user's root directory - newFolderData.json
 - (Operation *) createNewFolder {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"emailData" ofType:@"json"];
-    
-    // replace email address to self
-    NSString *payload = [[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]
-                         stringByReplacingOccurrencesOfString:@"<EMAIL>" withString:[[AuthenticationManager sharedInstance] userID]];
-    
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"newFolderData" ofType:@"json"];
+    NSMutableString *payload = [NSMutableString stringWithString:[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]];
     
     Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Create a new folder"
-                                                          urlString:[self createURLString:@"/me/sendMail"]
+                                                          urlString:[self createURLString:@"/me/drive/root/children"]
                                                       operationType:OperationPostCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
                                                         description:@"Creates a folder in the user's root directory."
-                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_action_user_sendMail"
+                                                  documentationLink:@"https://dev.onedrive.com/items/create.htm"
                                                              params:@{ParamsPostDataKey:payload}
                                                        paramsSource:@{ParamsPostDataKey:@(ParamsSourcePostData)}];
     
@@ -147,36 +138,43 @@
 }
 
 
-// Adds content to a file in the user's root directory.
-//PATCH: UpdateFileAsync - "me/drive/items/" + fileId + "/content"
-- (Operation *) updateFile {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"patchGroupData" ofType:@"json"];
-    NSMutableString *payload = [NSMutableString stringWithString:[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]];
+//Downloads the content of an existing file.
+- (Operation *) downloadFile {
+    Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Download file content"
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/me/drive/items/{%@}", ParamsFileIDKey]]
+                                                      operationType:OperationGet
+                                                        description:@"Downloads the content of an existing file"
+                                                  documentationLink:@"https://dev.onedrive.com/items/download.htm"
+                                                             params:@{ParamsFileIDKey:@""}
+                                                       paramsSource:@{ParamsFileIDKey:@(ParamsSourceGetFiles)}];
     
-    Operation *operation = [[Operation alloc] initWithOperationName:@"PATCH: Updates a specific file"
-                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}", ParamsGroupIDKey]]
-                                                      operationType:OperationPatchCustom
-                                                       customHeader:@{@"content-type":@"application/json"}
-                                                         customBody:payload
-                                                        description:@"Adds content to a file in the user's root directory.."
-                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Event"
-                                                             params:@{ParamsGroupIDKey:@"",
-                                                                      ParamsPostDataKey:payload}
-                                                       paramsSource:@{ParamsGroupIDKey:@(ParamsSourceGetGroups),
-                                                                      ParamsPostDataKey:@(ParamsSourcePostData)}];
+    return operation;
+    
+}
+
+
+// Update file contents, name of file -patchFileData.json
+- (Operation *) updateFileContents {
+    Operation *operation = [[Operation alloc] initWithOperationName:@"PATCH: Updates file metadata"
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/me/drive/items/{%@}/content", ParamsFileIDKey]]
+                                                      operationType:OperationPut
+                                                       customHeader:@{@"content-type":@"text/plain"}
+                                                         customBody:@"Updated text"
+                                                        description:@"Updates the content of the selected file."
+                                                  documentationLink:@"https://dev.onedrive.com/items/update.htm"
+                                                             params:@{ParamsFileIDKey:@""}
+                                                       paramsSource:@{ParamsFileIDKey:@(ParamsSourceGetFiles)}];
     
     return operation;
 }
 
 // Deletes a file in the user's root directory.
-//DELETE: DeleteFileAsync - "me/drive/items/" + fileId
-
 -(Operation *) deleteFile {
     Operation *operation = [[Operation alloc] initWithOperationName:@"DELETE: Delete a file"
                                                           urlString:[self createURLString:[NSString stringWithFormat:@"/me/drive/items/{%@}", ParamsFileIDKey]]
                                                       operationType:OperationDelete
                                                         description:@"Deletes a file in the user's root directory."
-                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Event"
+                                                  documentationLink:@"https://dev.onedrive.com/items/delete.htm"
                                                              params:@{ParamsFileIDKey: @""}
                                                        paramsSource:@{ParamsFileIDKey: @(ParamsSourceGetFiles)}];
     return operation;
@@ -184,52 +182,42 @@
 
 
 // Copies a file in the user's root directory
-//POST: CopyFileAsync - "me/drive/items/" + fileId + "/microsoft.graph.copy"
-//string postBody = "{'parentReference':{"
-//+ "'path':'" + serviceEndpoint + "/drive/root:'},"
-//+ "'name':'" + copyFileName + "'}";
-
-
 - (Operation *) copyFile {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"emailData" ofType:@"json"];
-    
-    // replace email address to self
-    NSString *payload = [[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]
-                         stringByReplacingOccurrencesOfString:@"<EMAIL>" withString:[[AuthenticationManager sharedInstance] userID]];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"copyFileData" ofType:@"json"];
+    NSString *payload = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
     
     
     Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Copy a text file"
-                                                          urlString:[self createURLString:@"/me/sendMail"]
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/me/drive/items/{%@}/microsoft.graph.copy", ParamsFileIDKey]]
                                                       operationType:OperationPostCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
                                                         description:@"Copies a file in the user's root directory."
-                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_action_user_sendMail"
-                                                             params:@{ParamsPostDataKey:payload}
-                                                       paramsSource:@{ParamsPostDataKey:@(ParamsSourcePostData)}];
+                                                  documentationLink:@"https://dev.onedrive.com/items/copy.htm"
+                                                             params:@{ParamsFileIDKey:@"",
+                                                                      ParamsPostDataKey:payload}
+                                                       paramsSource:@{ParamsFileIDKey:@(ParamsSourceGetFiles),
+                                                                      ParamsPostDataKey:@(ParamsSourcePostData)}];
     
     return operation;
 }
 
 
-//Renames a file in the user's root directory.
-//PATCH: RenameFileAsync - "me/drive/items/" + fileId
-//string patchBody = "{"
-//+ "'name':'" + newFileName + "'}";
-- (Operation *) renameFile {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"patchGroupData" ofType:@"json"];
+//Updates file metadata in the user's root directory - patchMetadataFile.json
+- (Operation *) updateFileMetadata {
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"patchMetadataFile" ofType:@"json"];
     NSMutableString *payload = [NSMutableString stringWithString:[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]];
     
-    Operation *operation = [[Operation alloc] initWithOperationName:@"PATCH: Rename a file"
-                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/myOrganization/groups/{%@}", ParamsGroupIDKey]]
+    Operation *operation = [[Operation alloc] initWithOperationName:@"PATCH: Updates file metadata"
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/me/drive/items/{%@}", ParamsFileIDKey]]
                                                       operationType:OperationPatchCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
-                                                        description:@"Renames a file in the user's root directory."
+                                                        description:@"Renames a file's metadata in the user's root directory."
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Event"
-                                                             params:@{ParamsGroupIDKey:@"",
+                                                             params:@{ParamsFileIDKey:@"",
                                                                       ParamsPostDataKey:payload}
-                                                       paramsSource:@{ParamsGroupIDKey:@(ParamsSourceGetGroups),
+                                                       paramsSource:@{ParamsFileIDKey:@(ParamsSourceGetFiles),
                                                                       ParamsPostDataKey:@(ParamsSourcePostData)}];
     
     return operation;
@@ -250,7 +238,7 @@
     return operation;
 }
 
-//Returns all of the users in your tenant's directory.
+//Returns select users in your tenant's directory.
 - (Operation *) getSelectUsersInTenant {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get select users in a tenant"
                                                           urlString:[self createURLString:@"/myOrganization/users"]
@@ -462,7 +450,7 @@
 //Gets the signed-in user's photo.
 - (Operation *) getUserPhoto{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's photo"
-                                                          urlString:[self createURLString:@"/me/userPhoto"]
+                                                          urlString:[self createURLString:@"/me/Photo"]
                                                       operationType:OperationGet
                                                         description:@"Gets the signed-in user's photo."
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_UserPhoto"

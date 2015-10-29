@@ -34,6 +34,9 @@
 		96AD90931B4EE5A800DE266B /* ResizableTextTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 96AD90921B4EE5A800DE266B /* ResizableTextTableViewCell.m */; };
 		96AE86C71B59BDE600D803B2 /* SnippetsManagerConf.m in Sources */ = {isa = PBXBuildFile; fileRef = 96AE86C61B59BDE600D803B2 /* SnippetsManagerConf.m */; };
 		96D316F01B864FB3003348E7 /* ParamsPostDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D316EF1B864FB3003348E7 /* ParamsPostDataViewController.m */; };
+		D31B940B1BE27B2800AC1CEE /* newFolderData.json in Resources */ = {isa = PBXBuildFile; fileRef = D31B940A1BE27B2800AC1CEE /* newFolderData.json */; settings = {ASSET_TAGS = (); }; };
+		D31B940F1BE298E500AC1CEE /* patchMetadataFile.json in Resources */ = {isa = PBXBuildFile; fileRef = D31B940E1BE298E500AC1CEE /* patchMetadataFile.json */; settings = {ASSET_TAGS = (); }; };
+		D31B94111BE2CB0700AC1CEE /* copyFileData.json in Resources */ = {isa = PBXBuildFile; fileRef = D31B94101BE2CB0700AC1CEE /* copyFileData.json */; settings = {ASSET_TAGS = (); }; };
 		D3EB832B1B87CBCD007509BD /* eventData.json in Resources */ = {isa = PBXBuildFile; fileRef = D3EB832A1B87CBCD007509BD /* eventData.json */; };
 /* End PBXBuildFile section */
 
@@ -84,6 +87,9 @@
 		96D316EE1B864FB3003348E7 /* ParamsPostDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParamsPostDataViewController.h; sourceTree = "<group>"; };
 		96D316EF1B864FB3003348E7 /* ParamsPostDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParamsPostDataViewController.m; sourceTree = "<group>"; };
 		D249061BA29ED1810F73734C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		D31B940A1BE27B2800AC1CEE /* newFolderData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = newFolderData.json; sourceTree = "<group>"; };
+		D31B940E1BE298E500AC1CEE /* patchMetadataFile.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = patchMetadataFile.json; sourceTree = "<group>"; };
+		D31B94101BE2CB0700AC1CEE /* copyFileData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = copyFileData.json; sourceTree = "<group>"; };
 		D35D18131BA33C20006CAA17 /* README.MD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.MD; sourceTree = "<group>"; };
 		D3EB832A1B87CBCD007509BD /* eventData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = eventData.json; sourceTree = "<group>"; };
 		F92D0DB9EA9FCA42FD4BE0E7 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -183,6 +189,9 @@
 				9642FCC01BA2CE9D00BCC6F0 /* newUserData.json */,
 				9642FCC21BA2D0D800BCC6F0 /* newGroupData.json */,
 				9642FCC61BA2D6BF00BCC6F0 /* patchGroupData.json */,
+				D31B940A1BE27B2800AC1CEE /* newFolderData.json */,
+				D31B940E1BE298E500AC1CEE /* patchMetadataFile.json */,
+				D31B94101BE2CB0700AC1CEE /* copyFileData.json */,
 				963E9EFA1B38C50400D57EAA /* Images.xcassets */,
 				969D39281B5709C700604B95 /* o365.png */,
 			);
@@ -339,9 +348,12 @@
 				963E9EF91B38C50400D57EAA /* Main.storyboard in Resources */,
 				965A31101BA0F2ED00644CFA /* emailData.json in Resources */,
 				D3EB832B1B87CBCD007509BD /* eventData.json in Resources */,
+				D31B940F1BE298E500AC1CEE /* patchMetadataFile.json in Resources */,
+				D31B94111BE2CB0700AC1CEE /* copyFileData.json in Resources */,
 				963E9EFE1B38C50400D57EAA /* LaunchScreen.xib in Resources */,
 				9642FCC11BA2CE9D00BCC6F0 /* newUserData.json in Resources */,
 				9642FCC31BA2D0D800BCC6F0 /* newGroupData.json in Resources */,
+				D31B940B1BE27B2800AC1CEE /* newFolderData.json in Resources */,
 				960C1FCC1B3B639700918D53 /* Podfile in Resources */,
 				9642FCC71BA2D6BF00BCC6F0 /* patchGroupData.json in Resources */,
 				969D393B1B5709C700604B95 /* o365.png in Resources */,

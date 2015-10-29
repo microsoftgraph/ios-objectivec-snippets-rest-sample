@@ -1,0 +1,5 @@
+{
+    "name": "Test Folder",
+    "folder": { },
+    "@name.conflictBehavior": "rename"
+}
