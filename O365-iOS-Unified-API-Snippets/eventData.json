@@ -4,15 +4,16 @@
         "DisplayName": "Water cooler"
     },
     "Attendees": [
-                  {
-                  "Type": "Required",
-                  "EmailAddress": {
-                  "Address": "mara@fabrikam.com"
-                  }
-                  }
+                  {"Type": "Required", "EmailAddress": {"Address": "mara@fabrikam.com"}}
                   ],
-    "Start": "<STARTDATETIME>",
-    "End": "<ENDDATETIME>",
+    "Start": {
+        "DateTime": "<STARTDATETIME>",
+        "TimeZone": "<TIMEZONE>"
+    },
+    "End": {
+        "DateTime": "<ENDDATETIME>",
+        "TimeZone": "<TIMEZONE>"
+    },
     "Body": {
         "Content": "Status updates, blocking issues, and next steps.",
         "ContentType": "Text"
