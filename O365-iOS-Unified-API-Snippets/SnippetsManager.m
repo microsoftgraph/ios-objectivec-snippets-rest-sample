@@ -416,7 +416,7 @@
     
     
     Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Create and send message to user"
-                                                          urlString:[self createURLString:@"/me/sendMail"]
+                                                          urlString:[self createURLString:@"/me/microsoft.graph.sendmail"]
                                                       operationType:OperationPostCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
