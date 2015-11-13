@@ -89,8 +89,6 @@
                     
                     NSArray *value = [responseObject objectForKey:@"value"];
                     
-                    NSLog(@"%@", value[0]);
-                    
                     for(id event in value){
                         
                         if([event objectForKey:@"id"]){
