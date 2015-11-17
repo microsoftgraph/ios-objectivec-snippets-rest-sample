@@ -55,11 +55,11 @@
                     NSArray *value = [responseObject objectForKey:@"value"];
 
                     for(id event in value){
-                        if([event objectForKey:@"Id"]){
-                             [self.guidArray addObject:[event objectForKey:@"Id"]];
+                        if([event objectForKey:@"id"]){
+                             [self.guidArray addObject:[event objectForKey:@"id"]];
                             
-                            if(![[event objectForKey:@"Subject"] isEqual:[NSNull null]])
-                                [self.displayArray addObject:[event objectForKey:@"Subject"]];
+                            if(![[event objectForKey:@"subject"] isEqual:[NSNull null]])
+                                [self.displayArray addObject:[event objectForKey:@"subject"]];
                             else
                                 [self.displayArray addObject:@""];
                         }

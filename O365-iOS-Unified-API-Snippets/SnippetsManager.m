@@ -21,8 +21,7 @@
     if(self){
         // Initialize sections
         _sections = @[@"Users",
-                      @"Groups",
-                      @"Contacts"];
+                      @"Groups"];
         
         // Initialize operations
         _operationsArray = [NSMutableArray new];
@@ -72,15 +71,9 @@
         [groupsArray addObject:[self getGroupMembers]];
         [groupsArray addObject:[self getGroupOwners]];
         
-        // Section 3 - Contacts
-        NSMutableArray *contactsArray = [NSMutableArray new];
-        [contactsArray addObject:[self getContactsInTenant]];
-        
         // Add sections to the array
         [_operationsArray addObject:usersArray];
         [_operationsArray addObject:groupsArray];
-        [_operationsArray addObject:contactsArray];
-        
         
     }
     return self;
@@ -155,7 +148,7 @@
 
 // Update file contents, name of file -patchFileData.json
 - (Operation *) updateFileContents {
-    Operation *operation = [[Operation alloc] initWithOperationName:@"PATCH: Updates file metadata"
+    Operation *operation = [[Operation alloc] initWithOperationName:@"PATCH: Updates file content"
                                                           urlString:[self createURLString:[NSString stringWithFormat:@"/me/drive/items/{%@}/content", ParamsFileIDKey]]
                                                       operationType:OperationPut
                                                        customHeader:@{@"content-type":@"text/plain"}
@@ -457,7 +450,7 @@
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's photo"
                                                           urlString:[self createURLString:@"/me/Photo"]
                                                       operationType:OperationGet
-                                                        description:@"Gets the signed-in user's photo."
+                                                        description:@"Gets the signed-in user's photo data.\n\nThis snippet will return meta data for the user photo.\nFor the photo data, append /$value to the request URL"
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_UserPhoto"
                                                              params:nil
                                                        paramsSource:nil];
@@ -573,20 +566,6 @@
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_owners"
                                                              params:@{ParamsGroupIDKey:@""}
                                                        paramsSource:@{ParamsGroupIDKey:@(ParamsSourceGetGroups)}];
-    return operation;
-}
-
-#pragma mark - Contacts Snippets
-
-//Returns all of the contacts in your tenant's directory.
-- (Operation *) getContactsInTenant {
-    Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get contacts in tenant"
-                                                          urlString:[self createURLString:@"/myOrganization/contacts"]
-                                                      operationType:OperationGet
-                                                        description:@"Returns all of the contacts in your tenant's directory."
-                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entitySet_contacts"
-                                                             params:nil
-                                                       paramsSource:nil];
     return operation;
 }
 
