@@ -3,8 +3,7 @@
     "displayName": "User <USER>",
     "mailNickname": "<USER>",
     "passwordProfile": {
-        "password": "p@ssw0rd!",
-        "forceChangePasswordNextLogin": false
+        "password": "p@ssw0rd!"
     },
     "userPrincipalName": "<USER>@<DOMAIN>"
 }

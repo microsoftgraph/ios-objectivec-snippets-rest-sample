@@ -62,6 +62,14 @@
              multiformObjects:(NSArray *)multiformObjects
                       success:(void (^)(id responseHeader, id responseObject))success
                       failure:(void (^)(id responseObject))failure;
+
+//PUT using custom header and body
++ (void)putOperation:(NSString *)path
+        customHeader:(NSDictionary *)customHeader
+          customBody:(NSString *)bodyString
+             success:(void (^)(id responseHeader, id responseObject))success
+             failure:(void (^)(id responseObject))failure;
+
 @end
 
 

@@ -245,6 +245,8 @@ NSString* const kUrlCellId = @"urlCellId";
          
         else if(type == ParamsSourcePostData)
             [self performSegueWithIdentifier:@"showPostParams" sender:nil];
+        else if(type == ParamsSourceGetFiles)
+            [self performSegueWithIdentifier:@"showListFiles" sender:nil];
     }
     
     else{
@@ -283,6 +285,14 @@ NSString* const kUrlCellId = @"urlCellId";
         vc.title = @"GroupID";
         vc.paramsDelegate = self;
     }
+    
+    else if([segue.identifier isEqualToString:@"showListFiles"]){
+        ParamsListTableViewController *vc = segue.destinationViewController;
+        vc.paramsSourceType = ParamsSourceGetFiles;
+        vc.title = @"FileID";
+        vc.paramsDelegate = self;
+        
+    }
 
     else if([segue.identifier isEqualToString:@"showPostParams"]){
         ParamsPostDataViewController *vc = segue.destinationViewController;
@@ -290,6 +300,8 @@ NSString* const kUrlCellId = @"urlCellId";
         vc.paramsDelegate = self;
         
     }
+    
+   
 }
 
 
@@ -423,6 +435,31 @@ NSString* const kUrlCellId = @"urlCellId";
                      }];
     }
     
+    // PUT
+    else if(self.operation.operationType == OperationPut){
+        [NetworkManager putOperation:self.operation.operationURLString
+                        customHeader:self.operation.customHeader
+                          customBody:self.operation.customBody
+                              success:^(id responseHeader, id responseObject) {
+                                  
+                                  NSLog(@"1");
+                                  self.responseHeader = [NSString stringWithFormat:@"%@", responseHeader];
+                                  self.responseBody = [NSString stringWithFormat:@"%@", responseObject];;
+                                  self.tableView.tableHeaderView = nil;
+                                  [self.tableView reloadData];
+                                  
+                              } failure:^(id responseObject) {
+                                  
+                                   NSLog(@"2");
+                                  NSError *error = (NSError*)responseObject;
+                                  
+                                  self.responseBody = [NSString stringWithFormat:@"%@\n\n%@", error.localizedDescription, [error.userInfo objectForKey:@"responseString"]];
+                                  
+                                  self.tableView.tableHeaderView = nil;
+                                  [self.tableView reloadData];
+                              }];
+    }
+    
     // DELETE
     else if(self.operation.operationType == OperationDelete){
         [NetworkManager deleteOperation:self.operation.operationURLString
@@ -529,6 +566,22 @@ NSString* const kUrlCellId = @"urlCellId";
     if(sourceType == ParamsSourceGetGroups){
         // change the url
         NSString *paramsId = ParamsGroupIDKey;
+        
+        NSMutableString *newURLString = [[NSMutableString alloc] initWithString:self.operation.operationURLString];
+        [newURLString replaceOccurrencesOfString:[NSString stringWithFormat:@"{%@}", paramsId]
+                                      withString:value options:NSLiteralSearch range:NSMakeRange(0, self.operation.operationURLString.length)];
+        
+        self.operation.operationURLString = newURLString;
+        
+        NSMutableDictionary *newParams = [NSMutableDictionary dictionaryWithDictionary:self.operation.params];
+        [newParams setObject:value forKey:paramsId];
+        
+        self.operation.params = newParams;
+    }
+    
+    if(sourceType == ParamsSourceGetFiles){
+        // change the url
+        NSString *paramsId = ParamsFileIDKey;
         
         NSMutableString *newURLString = [[NSMutableString alloc] initWithString:self.operation.operationURLString];
         [newURLString replaceOccurrencesOfString:[NSString stringWithFormat:@"{%@}", paramsId]

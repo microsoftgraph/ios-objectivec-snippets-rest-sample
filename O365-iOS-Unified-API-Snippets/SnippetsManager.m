@@ -21,8 +21,7 @@
     if(self){
         // Initialize sections
         _sections = @[@"Users",
-                      @"Groups",
-                      @"Contacts"];
+                      @"Groups"];
         
         // Initialize operations
         _operationsArray = [NSMutableArray new];
@@ -52,6 +51,14 @@
         [usersArray addObject:[self getUserReports]];
         [usersArray addObject:[self getUserPhoto]];
         [usersArray addObject:[self getUserGroupMembership]];
+        [usersArray addObject:[self getUserFiles]];
+        [usersArray addObject:[self createNewFile]];
+        [usersArray addObject:[self createNewFolder]];
+        [usersArray addObject:[self downloadFile]];
+        [usersArray addObject:[self updateFileContents]];
+        [usersArray addObject:[self deleteFile]];
+        [usersArray addObject:[self updateFileMetadata]];
+        
         
         // Section 2 - Groups
         NSMutableArray *groupsArray = [NSMutableArray new];
@@ -63,15 +70,9 @@
         [groupsArray addObject:[self getGroupMembers]];
         [groupsArray addObject:[self getGroupOwners]];
         
-        // Section 3 - Contacts
-        NSMutableArray *contactsArray = [NSMutableArray new];
-        [contactsArray addObject:[self getContactsInTenant]];
-        
         // Add sections to the array
         [_operationsArray addObject:usersArray];
         [_operationsArray addObject:groupsArray];
-        [_operationsArray addObject:contactsArray];
-        
         
     }
     return self;
@@ -79,6 +80,121 @@
 
 
 #pragma mark - Users
+
+//Gets all user files.
+- (Operation *) getUserFiles {
+    Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user files"
+                                                          urlString:[self createURLString:@"/me/drive/root/children"]
+                                                      operationType:OperationGet
+                                                        description:@"Returns all of the user's files"
+                                                  documentationLink:@"https://dev.onedrive.com/drives/get.htm"
+                                                             params:nil
+                                                       paramsSource:nil];
+
+    return operation;
+    
+}
+
+// Creates a text file in the user's root directory.
+- (Operation *) createNewFile {
+    NSString *fileName = @"NewFile.txt";
+    Operation *operation = [[Operation alloc] initWithOperationName:@"PUT: Create a text file"
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/me/drive/root/children/%@/content", fileName]]
+                                                      operationType:OperationPut
+                                                       customHeader:@{@"content-type":@"text/plain"}
+                                                         customBody:@"Test file"
+                                                        description:@"Creates a text file in the user's root directory. The file name NewFile.txt is editable in API URL. "
+                                                  documentationLink:@"https://dev.onedrive.com/items/create.htm"
+                                                             params:nil
+                                                       paramsSource:nil];
+    
+    return operation;
+}
+
+// Creates a folder in the user's root directory - newFolderData.json
+- (Operation *) createNewFolder {
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"newFolderData" ofType:@"json"];
+    NSMutableString *payload = [NSMutableString stringWithString:[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]];
+    
+    Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Create a new folder"
+                                                          urlString:[self createURLString:@"/me/drive/root/children"]
+                                                      operationType:OperationPostCustom
+                                                       customHeader:@{@"content-type":@"application/json"}
+                                                         customBody:payload
+                                                        description:@"Creates a folder in the user's root directory."
+                                                  documentationLink:@"https://dev.onedrive.com/items/create.htm"
+                                                             params:@{ParamsPostDataKey:payload}
+                                                       paramsSource:@{ParamsPostDataKey:@(ParamsSourcePostData)}];
+    
+    return operation;
+}
+
+
+//Downloads the content of an existing file.
+- (Operation *) downloadFile {
+    Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Download file content"
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/me/drive/items/{%@}", ParamsFileIDKey]]
+                                                      operationType:OperationGet
+                                                        description:@"Downloads the content of an existing file"
+                                                  documentationLink:@"https://dev.onedrive.com/items/download.htm"
+                                                             params:@{ParamsFileIDKey:@""}
+                                                       paramsSource:@{ParamsFileIDKey:@(ParamsSourceGetFiles)}];
+    
+    return operation;
+    
+}
+
+
+// Update file contents, name of file -patchFileData.json
+- (Operation *) updateFileContents {
+    Operation *operation = [[Operation alloc] initWithOperationName:@"PATCH: Updates file content"
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/me/drive/items/{%@}/content", ParamsFileIDKey]]
+                                                      operationType:OperationPut
+                                                       customHeader:@{@"content-type":@"text/plain"}
+                                                         customBody:@"Updated text"
+                                                        description:@"Updates the content of the selected file."
+                                                  documentationLink:@"https://dev.onedrive.com/items/update.htm"
+                                                             params:@{ParamsFileIDKey:@""}
+                                                       paramsSource:@{ParamsFileIDKey:@(ParamsSourceGetFiles)}];
+    
+    return operation;
+}
+
+// Deletes a file in the user's root directory.
+-(Operation *) deleteFile {
+    Operation *operation = [[Operation alloc] initWithOperationName:@"DELETE: Delete a file"
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/me/drive/items/{%@}", ParamsFileIDKey]]
+                                                      operationType:OperationDelete
+                                                        description:@"Deletes a file in the user's root directory."
+                                                  documentationLink:@"https://dev.onedrive.com/items/delete.htm"
+                                                             params:@{ParamsFileIDKey: @""}
+                                                       paramsSource:@{ParamsFileIDKey: @(ParamsSourceGetFiles)}];
+    return operation;
+}
+
+
+//Updates file metadata in the user's root directory - patchMetadataFile.json
+- (Operation *) updateFileMetadata {
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"patchMetadataFile" ofType:@"json"];
+    NSMutableString *payload = [NSMutableString stringWithString:[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]];
+    
+    Operation *operation = [[Operation alloc] initWithOperationName:@"PATCH: Updates file metadata"
+                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/me/drive/items/{%@}", ParamsFileIDKey]]
+                                                      operationType:OperationPatchCustom
+                                                       customHeader:@{@"content-type":@"application/json"}
+                                                         customBody:payload
+                                                        description:@"Renames a file's metadata in the user's root directory."
+                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entityType_Event"
+                                                             params:@{ParamsFileIDKey:@"",
+                                                                      ParamsPostDataKey:payload}
+                                                       paramsSource:@{ParamsFileIDKey:@(ParamsSourceGetFiles),
+                                                                      ParamsPostDataKey:@(ParamsSourcePostData)}];
+    
+    return operation;
+}
+
+
+
 //Returns all of the users in your tenant's directory.
 - (Operation *) getUsersInTenant {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get users in tenant"
@@ -92,7 +208,7 @@
     return operation;
 }
 
-//Returns all of the users in your tenant's directory.
+//Returns select users in your tenant's directory.
 - (Operation *) getSelectUsersInTenant {
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get select users in a tenant"
                                                           urlString:[self createURLString:@"/myOrganization/users"]
@@ -185,15 +301,20 @@
 
 // Creates and adds an event to the signed-in user's calendar - eventData.json
 - (Operation *) addNewCalendarEvent {
+    NSString *timeZone = @"UTC";
+    
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:timeZone]];
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
     
     NSDate *startDate = [[NSDate date] dateByAddingTimeInterval:60*60*24];
     NSDate *endDate = [[NSDate date] dateByAddingTimeInterval:60*60*24+100];
     
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"eventData" ofType:@"json"];
-    NSString *payload = [[[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil] stringByReplacingOccurrencesOfString:@"<STARTDATETIME>" withString:[dateFormatter stringFromDate:startDate]]
-                         stringByReplacingOccurrencesOfString:@"<ENDDATETIME>" withString:[dateFormatter stringFromDate:endDate]];
+    NSString *payload = [[[[NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil]
+                          stringByReplacingOccurrencesOfString:@"<STARTDATETIME>" withString:[dateFormatter stringFromDate:startDate]]
+                         stringByReplacingOccurrencesOfString:@"<ENDDATETIME>" withString:[dateFormatter stringFromDate:endDate]]
+                         stringByReplacingOccurrencesOfString:@"<TIMEZONE>" withString:timeZone];
     
     Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Add a new event"
                                                           urlString:[self createURLString:@"/me/events"]
@@ -265,7 +386,7 @@
     
     
     Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Create and send message to user"
-                                                          urlString:[self createURLString:@"/me/sendMail"]
+                                                          urlString:[self createURLString:@"/me/microsoft.graph.sendmail"]
                                                       operationType:OperationPostCustom
                                                        customHeader:@{@"content-type":@"application/json"}
                                                          customBody:payload
@@ -304,9 +425,9 @@
 //Gets the signed-in user's photo.
 - (Operation *) getUserPhoto{
     Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get user's photo"
-                                                          urlString:[self createURLString:@"/me/userPhoto"]
+                                                          urlString:[self createURLString:@"/me/Photo"]
                                                       operationType:OperationGet
-                                                        description:@"Gets the signed-in user's photo."
+                                                        description:@"Gets the signed-in user's photo data.\n\nThis snippet will return meta data for the user photo.\nFor the photo data, append /$value to the request URL"
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_UserPhoto"
                                                              params:nil
                                                        paramsSource:nil];
@@ -422,20 +543,6 @@
                                                   documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_relationship_owners"
                                                              params:@{ParamsGroupIDKey:@""}
                                                        paramsSource:@{ParamsGroupIDKey:@(ParamsSourceGetGroups)}];
-    return operation;
-}
-
-#pragma mark - Contacts Snippets
-
-//Returns all of the contacts in your tenant's directory.
-- (Operation *) getContactsInTenant {
-    Operation *operation = [[Operation alloc] initWithOperationName:@"GET: Get contacts in tenant"
-                                                          urlString:[self createURLString:@"/myOrganization/contacts"]
-                                                      operationType:OperationGet
-                                                        description:@"Returns all of the contacts in your tenant's directory."
-                                                  documentationLink:@"https://msdn.microsoft.com/office/office365/HowTo/office-365-unified-api-reference#msg_ref_entitySet_contacts"
-                                                             params:nil
-                                                       paramsSource:nil];
     return operation;
 }
 

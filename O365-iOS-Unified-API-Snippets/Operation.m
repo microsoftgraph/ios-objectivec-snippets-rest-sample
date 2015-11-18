@@ -9,6 +9,7 @@
 NSString* const ParamsEventIDKey = @"eventID";
 NSString* const ParamsPostDataKey = @"Post data";
 NSString* const ParamsGroupIDKey = @"groupID";
+NSString* const ParamsFileIDKey = @"fileID";
 
 - (instancetype) initWithOperationName:(NSString *)operationName
                              urlString:(NSString *)urlString
