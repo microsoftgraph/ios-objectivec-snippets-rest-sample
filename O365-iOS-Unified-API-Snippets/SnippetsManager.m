@@ -57,7 +57,6 @@
         [usersArray addObject:[self downloadFile]];
         [usersArray addObject:[self updateFileContents]];
         [usersArray addObject:[self deleteFile]];
-        [usersArray addObject:[self copyFile]];
         [usersArray addObject:[self updateFileMetadata]];
         
         
@@ -170,28 +169,6 @@
                                                   documentationLink:@"https://dev.onedrive.com/items/delete.htm"
                                                              params:@{ParamsFileIDKey: @""}
                                                        paramsSource:@{ParamsFileIDKey: @(ParamsSourceGetFiles)}];
-    return operation;
-}
-
-
-// Copies a file in the user's root directory
-- (Operation *) copyFile {
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"copyFileData" ofType:@"json"];
-    NSString *payload = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-    
-    
-    Operation *operation = [[Operation alloc] initWithOperationName:@"POST: Copy a text file"
-                                                          urlString:[self createURLString:[NSString stringWithFormat:@"/me/drive/items/{%@}/microsoft.graph.copy", ParamsFileIDKey]]
-                                                      operationType:OperationPostCustom
-                                                       customHeader:@{@"content-type":@"application/json"}
-                                                         customBody:payload
-                                                        description:@"Copies a file in the user's root directory."
-                                                  documentationLink:@"https://dev.onedrive.com/items/copy.htm"
-                                                             params:@{ParamsFileIDKey:@"",
-                                                                      ParamsPostDataKey:payload}
-                                                       paramsSource:@{ParamsFileIDKey:@(ParamsSourceGetFiles),
-                                                                      ParamsPostDataKey:@(ParamsSourcePostData)}];
-    
     return operation;
 }
 
