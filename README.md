@@ -1,14 +1,13 @@
-# Office 365 iOS Unified API Snippets Preview
+# Office 365 iOS Microsoft Graph Snippets
 
 
 
 ## Introduction
 
-The Office 365 unified API exposes multiple APIs from Microsoft cloud services through a single REST API endpoint. This repository shows you how to access multiple resources, including Microsoft Azure Active Directory (AD) and the Office 365 APIs, by making HTTP requests to the Office 365 unified API in an iOS application. 
+The Office 365 Microsoft Graph API, formerly known as the unified API (Preview), exposes multiple APIs from Microsoft cloud services through a single REST API endpoint. This repository shows you how to access multiple resources, including Microsoft Azure Active Directory (AD) and the Office 365 APIs, by making HTTP requests to the Office 365 Microsoft Graph API in an iOS application. 
 
-
-**Note: If possible, please use this sample with a "non-work" or test account in Office 365. With the current version of the project, it does not clean up the created objects in your mailbox, calendar, contacts, and objects created from additional operations. At this time you'll have to manually remove these artifacts, for example, sample mails, contacts, and calendar events.**  
-
+> Note: Try out the [Get started with Office 365 APIs](http://dev.office.com/getting-started/office365apis?platform=option-ios#setup) page which simplifies registration so you can get this sample running faster.
+ 
 ## Prerequisites
 * [Xcode](https://developer.apple.com/xcode/downloads/) from Apple
 * Installation of [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)  as a dependency manager.
@@ -19,7 +18,7 @@ The Office 365 unified API exposes multiple APIs from Microsoft cloud services t
 
      > Important: You will also need to ensure your Azure subscription is bound to your Office 365 tenant. To do this see the Active Directory team's blog post, [Creating and Managing Multiple Windows Azure Active Directories](http://blogs.technet.com/b/ad/archive/2013/11/08/creating-and-managing-multiple-windows-azure-active-directories.aspx). The section **Adding a new directory** will explain how to do this. You can also see [Set up your Office 365 development environment](https://msdn.microsoft.com/office/office365/howto/setup-development-environment#bk_CreateAzureSubscription) and the section **Associate your Office 365 account with Azure AD to create and manage apps** for more information.
       
-* A client id and redirect uri values of an application registered in Azure. This sample must be registered and granted specific permissions for the **Office 365 unified API (preview)**. To learn how to create this registration, see [Register your native app with the Azure Management Portal](https://msdn.microsoft.com/office/office365/howto/add-common-consent-manually). Next, to assign the correct permissions to the registration, see [grant proper permissions](https://github.com/OfficeDev/O365-iOS-Unified-API-Snippets/wiki/Grant-permissions-to-the-Snippets-application-in-Azure) in the repository wiki. 
+* A client id and redirect uri values of an application registered in Azure. This sample must be registered and granted specific permissions for the **Microsoft Graph API**. To learn how to create this registration, see [Register your native app with the Azure Management Portal](https://msdn.microsoft.com/office/office365/howto/add-common-consent-manually). Next, to assign the correct permissions to the registration, see [grant proper permissions](https://github.com/OfficeDev/O365-iOS-Unified-API-Snippets/wiki/Grant-permissions-to-the-Snippets-application-in-Azure) in the repository wiki. 
 
 
 ## Running this sample in Xcode
@@ -62,9 +61,9 @@ Questions about Office 365 development in general should be posted to [Stack Ove
 
 ## Additional resources
 
-* [Office 365 Connect Sample for iOS Using Unified API](https://github.com/OfficeDev/O365-iOS-Unified-API-Connect)
-* [Office 365 unified API overview (preview)](https://msdn.microsoft.com/en-us/office/office365/howto/office-365-unified-api-overview)
-* [Microsoft Azure Active Directory Authentication Library (ADAL) for iOS and OSX](https://github.com/AzureAD/azure-activedirectory-library-for-objc)
+* [Office Dev Center](http://dev.office.com/)
+* [Microsoft Graph overview page](https://graph.microsoft.io)
+* [Using CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 
 ## Copyright
 Copyright (c) 2015 Microsoft. All rights reserved.
