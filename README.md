@@ -4,7 +4,7 @@
 
 ## Introduction
 
-The Office 365 Microsoft Graph API, formerly known as the unified API (Preview), exposes multiple APIs from Microsoft cloud services through a single REST API endpoint. This repository shows you how to access multiple resources, including Microsoft Azure Active Directory (AD) and the Office 365 APIs, by making HTTP requests to the Office 365 Microsoft Graph API in an iOS application. 
+The Office 365 Microsoft Graph API (previously called Office 365 unified API) exposes multiple APIs from Microsoft cloud services through a single REST API endpoint. This repository shows you how to access multiple resources, including Microsoft Azure Active Directory (AD) and the Office 365 APIs, by making HTTP requests to the Office 365 Microsoft Graph API in an iOS application. 
 
 > Note: Try out the [Get started with Office 365 APIs](http://dev.office.com/getting-started/office365apis?platform=option-ios#setup) page which simplifies registration so you can get this sample running faster.
  
@@ -18,7 +18,7 @@ The Office 365 Microsoft Graph API, formerly known as the unified API (Preview),
 
      > Important: You will also need to ensure your Azure subscription is bound to your Office 365 tenant. To do this see the Active Directory team's blog post, [Creating and Managing Multiple Windows Azure Active Directories](http://blogs.technet.com/b/ad/archive/2013/11/08/creating-and-managing-multiple-windows-azure-active-directories.aspx). The section **Adding a new directory** will explain how to do this. You can also see [Set up your Office 365 development environment](https://msdn.microsoft.com/office/office365/howto/setup-development-environment#bk_CreateAzureSubscription) and the section **Associate your Office 365 account with Azure AD to create and manage apps** for more information.
       
-* A client id and redirect uri values of an application registered in Azure. This sample must be registered and granted specific permissions for the **Microsoft Graph API**. To learn how to create this registration, see [Register your native app with the Azure Management Portal](https://msdn.microsoft.com/office/office365/howto/add-common-consent-manually). Next, to assign the correct permissions to the registration, see [grant proper permissions](https://github.com/OfficeDev/O365-iOS-Unified-API-Snippets/wiki/Grant-permissions-to-the-Snippets-application-in-Azure) in the repository wiki. 
+* A client id and redirect uri values of an application registered in Azure. This sample must be registered and granted specific permissions for the **Microsoft Graph API**. To learn how to create this registration, see [Register your native app with the Azure Management Portal](https://msdn.microsoft.com/office/office365/howto/add-common-consent-manually). Next, to assign the correct permissions to the registration, see [grant proper permissions](https://github.com/OfficeDev/O365-iOS-Microsoft-Graph-Snippets/wiki/Grant-permissions-to-the-Snippets-application-in-Azure) in the repository wiki. 
 
 
 ## Running this sample in Xcode
@@ -49,14 +49,14 @@ The Office 365 Microsoft Graph API, formerly known as the unified API (Preview),
 
 5.Run the sample
 
-To learn more about the sample, visit our [understanding the code](https://github.com/OfficeDev/O365-iOS-Unified-API-Snippets/wiki/Understanding-the-Snippets-sample-code) wiki page.
+To learn more about the sample, visit our [understanding the code](https://github.com/OfficeDev/O365-iOS-Microsoft-Graph-Snippets/wiki/Understanding-the-Snippets-sample-code) wiki page.
 
 
 ## Questions and comments
 
-We'd love to get your feedback about the Office 365 iOS Snippets project. You can send your questions and suggestions to us in the [Issues](https://github.com/OfficeDev/O365-iOS-Unified-API-Snippets/issues) section of this repository.
+We'd love to get your feedback about the Office 365 iOS Snippets project. You can send your questions and suggestions to us in the [Issues](https://github.com/OfficeDev/O365-iOS-Microsoft-Graph-Snippets/issues) section of this repository.
 
-Questions about Office 365 development in general should be posted to [Stack Overflow](http://stackoverflow.com/questions/tagged/Office365+API). Make sure that your questions or comments are tagged with [Office365] and [API].
+Questions about Office 365 development in general should be posted to [Stack Overflow](http://stackoverflow.com/questions/tagged/Office365+API). Make sure that your questions or comments are tagged with [Office365] and [MicrosoftGraph].
 
 
 ## Additional resources
