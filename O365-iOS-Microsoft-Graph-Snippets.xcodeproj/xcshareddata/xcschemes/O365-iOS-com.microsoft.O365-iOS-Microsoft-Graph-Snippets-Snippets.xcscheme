@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "963E9EE61B38C50400D57EAA"
-               BuildableName = "O365-iOS-Unified-API-Snippets.app"
-               BlueprintName = "O365-iOS-Unified-API-Snippets"
-               ReferencedContainer = "container:O365-iOS-Unified-API-Snippets.xcodeproj">
+               BuildableName = "O365-iOS-Microsoft-Graph-Snippets.app"
+               BlueprintName = "O365-iOS-Microsoft-Graph-Snippets"
+               ReferencedContainer = "container:O365-iOS-Microsoft-Graph-Snippets.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "963E9EE61B38C50400D57EAA"
-            BuildableName = "O365-iOS-Unified-API-Snippets.app"
-            BlueprintName = "O365-iOS-Unified-API-Snippets"
-            ReferencedContainer = "container:O365-iOS-Unified-API-Snippets.xcodeproj">
+            BuildableName = "O365-iOS-Microsoft-Graph-Snippets.app"
+            BlueprintName = "O365-iOS-Microsoft-Graph-Snippets"
+            ReferencedContainer = "container:O365-iOS-Microsoft-Graph-Snippets.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "963E9EE61B38C50400D57EAA"
-            BuildableName = "O365-iOS-Unified-API-Snippets.app"
-            BlueprintName = "O365-iOS-Unified-API-Snippets"
-            ReferencedContainer = "container:O365-iOS-Unified-API-Snippets.xcodeproj">
+            BuildableName = "O365-iOS-Microsoft-Graph-Snippets.app"
+            BlueprintName = "O365-iOS-Microsoft-Graph-Snippets"
+            ReferencedContainer = "container:O365-iOS-Microsoft-Graph-Snippets.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -75,9 +75,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "963E9EE61B38C50400D57EAA"
-            BuildableName = "O365-iOS-Unified-API-Snippets.app"
-            BlueprintName = "O365-iOS-Unified-API-Snippets"
-            ReferencedContainer = "container:O365-iOS-Unified-API-Snippets.xcodeproj">
+            BuildableName = "O365-iOS-Microsoft-Graph-Snippets.app"
+            BlueprintName = "O365-iOS-Microsoft-Graph-Snippets"
+            ReferencedContainer = "container:O365-iOS-Microsoft-Graph-Snippets.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
