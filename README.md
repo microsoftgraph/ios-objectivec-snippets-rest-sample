@@ -6,7 +6,6 @@
 
 Microsoft Graph (previously called Office 365 unified API) exposes multiple APIs from Microsoft cloud services through a single REST API endpoint. This repository shows you how to access multiple resources, including Microsoft Azure Active Directory (AD) and the Office 365 APIs, by making HTTP requests to the Microsoft Graph API in an iOS application. 
 
-> Note: Try out the [Get started with Office 365 APIs](http://dev.office.com/getting-started/office365apis?platform=option-ios#setup) page which simplifies registration so you can get this sample running faster.
  
 ## Prerequisites
 * [Xcode](https://developer.apple.com/xcode/downloads/) from Apple
