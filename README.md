@@ -18,7 +18,7 @@ Microsoft Graph (previously called Office 365 unified API) exposes multiple APIs
 
      > Important: You will also need to ensure your Azure subscription is bound to your Office 365 tenant. To do this see the Active Directory team's blog post, [Creating and Managing Multiple Windows Azure Active Directories](http://blogs.technet.com/b/ad/archive/2013/11/08/creating-and-managing-multiple-windows-azure-active-directories.aspx). The section **Adding a new directory** will explain how to do this. You can also see [Set up your Office 365 development environment](https://msdn.microsoft.com/office/office365/howto/setup-development-environment#bk_CreateAzureSubscription) and the section **Associate your Office 365 account with Azure AD to create and manage apps** for more information.
       
-* A client id and redirect uri values of an application registered in Azure. This sample must be registered and granted specific permissions for **Microsoft Graph**. To learn how to create this registration, see [Register your native app with the Azure Management Portal](https://msdn.microsoft.com/office/office365/howto/add-common-consent-manually). Next, to assign the correct permissions to the registration, see [grant proper permissions](https://github.com/OfficeDev/O365-iOS-Microsoft-Graph-Snippets/wiki/Grant-permissions-to-the-Snippets-application-in-Azure) in the repository wiki. 
+* * A client id (application id) and redirect uri values of an application registered in Azure. This sample application must be granted several permissions for **Microsoft Graph**. To create the registration, see [Grant permissions to the Snippets application in Azure](https://github.com/microsoftgraph/ios-objectivec-snippets-rest-sample/wiki/Grant-permissions-to-the-Snippets-application-in-Azure).
 
 
 ## Running this sample in Xcode
@@ -36,7 +36,7 @@ Microsoft Graph (previously called Office 365 unified API) exposes multiple APIs
    	For more information, see **Using CocoaPods** in [Additional Resources](#AdditionalResources)
   
 3. Open **O365-iOS-Microsoft-Graph-Snippets.xcworkspace**
-4. Open **ConnectViewController.m** under the **Controllers** folder in the project. Ensure you have registered your app in Microsoft Azure, configured the proper permissions as specified, and obtained the **ClientID** and **RedirectUri** values from the registration. Again, this procedure is detailed under the fifth bullet point in the prerequisites section: **A client id and redirect uri values of an application registered in Azure.** You'll see that the **ClientID** and **RedirectUri** values can be added to the top of the file. Supply the necessary values here:
+4. Open **ConnectViewController.m** under the **Controllers** folder in the project. Ensure you have registered your app in Microsoft Azure, configured the proper permissions as specified, and obtained the **ClientID** (application id) and **RedirectUri** values from the registration. Again, this procedure is detailed under the fifth bullet point in the prerequisites section: **A client id and redirect uri values of an application registered in Azure.** You'll see that the **ClientID** and **RedirectUri** values can be added to the top of the file. Supply the necessary values here:
 
         // You will set your application's clientId and redirect URI. You get
         // these when you register your application in Microsoft Azure.
@@ -45,7 +45,6 @@ Microsoft Graph (previously called Office 365 unified API) exposes multiple APIs
         NSString * const kResourceId  = @"https://graph.microsoft.com";
         NSString * const kAuthority   = @"https://login.microsoftonline.com/common";
     
-    > Note: If you have don't have CLIENT_ID and REDIRECT_URI values, see [Register your native app with the Azure Management Portal](https://msdn.microsoft.com/office/office365/howto/add-common-consent-manually) and take note of the CLIENT\_ID and REDIRECT_URI.
 
 5.Run the sample
 
